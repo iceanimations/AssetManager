@@ -52,7 +52,7 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            var cat = asset.Category;
+            ViewBag.ProjectId = asset.Category.Project.Id;
             return View(asset);
         }
 
@@ -78,7 +78,7 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail,DateTimeCreated")] Asset asset)
+        public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail")] Asset asset)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +106,7 @@ namespace AssetManager.Controllers
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
+            ViewBag.ProjectId = asset.Category.Project.Id;
             return View(asset);
         }
 
@@ -120,7 +121,8 @@ namespace AssetManager.Controllers
             {
                 db.Entry(asset).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var project = db.Categories.Find(asset.CategoryId).Project;
+                return RedirectToAction("Index", new { id=project.Id });
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
             return View(asset);
@@ -138,6 +140,7 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ProjectId = asset.Category.Project.Id;
             return View(asset);
         }
 
@@ -147,9 +150,10 @@ namespace AssetManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Asset asset = db.Assets.Find(id);
+            var project = asset.Category.Project;
             db.Assets.Remove(asset);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id=project.Id });
         }
 
         protected override void Dispose(bool disposing)

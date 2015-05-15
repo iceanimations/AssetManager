@@ -1,0 +1,34 @@
+﻿@model IEnumerable<AssetManager.Models.Project>
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="jumbotron">
+    <h1>IDAM</h1>
+    <p class="lead">ICE Digital Asset Manager</p>
+</div>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2" >
+        <div class="carousel slide" id="myCarousel">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="col-md-4">
+                        <a href="@Url.Action("Index", "Assets", new { id = Model.First().Id }) "><img src="http://placehold.it/500/CCCCCC&amp;text=@Model.First().Name" class="img-responsive"></a>
+                        <div class="urun-title"><span class="glyphicon glyphicon-star"></span>@Model.First().Name</div>
+                    </div>
+                </div>
+                @foreach(var project in Model.Skip(1)) {
+                    <div class="item">
+                        <div class="col-md-4">
+                            <a href="@Url.Action("Index", "Assets", new { id = project.Id })"><img src="http://placehold.it/500/CCCCCC&amp;text=@project.Name" class="img-responsive"></a>
+                            <div class="urun-title"><span class="glyphicon glyphicon-star"></span>@project.Name</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+        </div>
+    </div>
+</div>

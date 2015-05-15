@@ -1,0 +1,57 @@
+﻿@model IEnumerable<AssetManager.Models.Component>
+
+@{
+    ViewBag.Title = "Components";
+}
+
+<h2>Components</h2>
+
+<p>
+    @Html.ActionLink("Create New Component", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Asset.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Locked)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTimeCreated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTimeUpdated)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Asset.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Locked)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTimeCreated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTimeUpdated)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

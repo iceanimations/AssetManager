@@ -1,0 +1,49 @@
+﻿@model AssetManager.Models.Project
+
+@{
+    ViewBag.Title = "Project Details";
+}
+
+<h2>Project Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectType.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectType.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateTimeCreated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateTimeCreated)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <!--@@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |-->
+    @Html.ActionLink("Back to List", "Index")
+</p>

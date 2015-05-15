@@ -1,0 +1,41 @@
+﻿@model AssetManager.Models.ProjectType
+
+@{
+    ViewBag.Title = "Project Type Details";
+}
+
+<h2>Project Type Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocationUNC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocationUNC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocationDisplay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocationDisplay)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

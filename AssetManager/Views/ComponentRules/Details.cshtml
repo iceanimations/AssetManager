@@ -1,0 +1,33 @@
+﻿@model AssetManager.Models.ComponentRule
+
+@{
+    ViewBag.Title = "Component Rule Details";
+}
+
+<h2>Component Rule Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Component.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Component.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

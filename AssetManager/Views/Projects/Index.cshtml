@@ -3,8 +3,18 @@
 @{
     ViewBag.Title = "Projects";
 }
+<script>
+    
+</script>
 
 <h2>Projects</h2>
+@{
+    var url = Url.Action("Index", "Projects");
+}
+<script>
+
+    $("#locBar").append("<span>Projects</span>");
+</script>
 
 <p>
     @Html.ActionLink("Create New Project", "Create")

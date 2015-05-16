@@ -29,6 +29,8 @@ namespace AssetManager
                       "~/Content/styles.css"));
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                 "~/Scripts/custom.js"));
+            bundles.Add(new ScriptBundle("~/bundles/custom2").Include(
+                "~/Scripts/custom2.js"));
         }
     }
 }

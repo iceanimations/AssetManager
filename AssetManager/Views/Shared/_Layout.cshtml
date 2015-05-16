@@ -6,6 +6,13 @@
     <title>@ViewBag.Title - IDAM</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <script language="javascript" type="text/javascript" src="~/Scripts/custom2.js"></script>
+    <script language="javascript" type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script language="javascript" type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script language="javascript" type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="~/Scripts/respond.min.js"></script>
+
 </head>
 <body style="background-color:lightgray">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -44,6 +51,13 @@
                     </li>
                 </ul>
             </div>
+            
+        </div>
+        <!--Location bar-->
+    </div>
+    <div class="container loc-bar">
+        <div class="row col-md-12" id="locBar">
+            <a href="@Url.Action("Index","Home")">Home</a> > 
         </div>
     </div>
     <div class="container body-content">
@@ -54,8 +68,9 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <!--@@Scripts.Render("~/bundles/jquery")
+    @@Scripts.Render("~/bundles/bootstrap")
+    -->
     @Scripts.Render("~/bundles/custom")
     @RenderSection("scripts", required: false)
 </body>

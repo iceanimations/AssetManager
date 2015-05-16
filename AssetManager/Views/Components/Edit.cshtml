@@ -4,6 +4,12 @@
     ViewBag.Title = "Edit Component";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
+    $("#locBar").append("<a href=@Url.Action("Index", "Components", new { id=ViewBag.Asset.Id })>@ViewBag.Asset.Name</a> > ")
+    $("#locBar").append("<span>@Model.Name</span>");
+</script>
+
 <h2>Edit Component</h2>
 
 
@@ -59,23 +65,6 @@
         </div>
         @Html.HiddenFor(model => model.DateTimeCreated)
         @Html.HiddenFor(model => model.DateTimeUpdated)
-        <!--
-        <div class="form-group">
-            @@Html.LabelFor(model => model.DateTimeCreated, htmlAttributes: new { @@class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @@Html.EditorFor(model => model.DateTimeCreated, new { htmlAttributes = new { @@class = "form-control" } })
-                @@Html.ValidationMessageFor(model => model.DateTimeCreated, "", new { @@class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @@Html.LabelFor(model => model.DateTimeUpdated, htmlAttributes: new { @@class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @@Html.EditorFor(model => model.DateTimeUpdated, new { htmlAttributes = new { @@class = "form-control" } })
-                @@Html.ValidationMessageFor(model => model.DateTimeUpdated, "", new { @@class = "text-danger" })
-            </div>
-        </div>
-        -->
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -85,7 +74,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { id=ViewBag.Asset.Id })
 </div>
 
 @section Scripts {

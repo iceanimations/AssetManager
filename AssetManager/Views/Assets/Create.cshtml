@@ -4,6 +4,11 @@
     ViewBag.Title = "Create Asset";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
+    $("#locBar").append("<span>Create New Asset</span>");
+</script>
+
 <h2>Create Asset</h2>
 
 
@@ -47,7 +52,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index", new { id=ViewBag.ProjectId})
+    @Html.ActionLink("Back to List", "Index", new { id=ViewBag.Project.Id })
 </div>
 
 @section Scripts {

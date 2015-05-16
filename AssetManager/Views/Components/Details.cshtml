@@ -4,6 +4,12 @@
     ViewBag.Title = "Component Details";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
+    $("#locBar").append("<a href=@Url.Action("Index", "Components", new { id=ViewBag.Asset.Id })>@ViewBag.Asset.Name</a> > ")
+    $("#locBar").append("<span>@Model.Name</span>");
+</script>
+
 <h2>Component Details</h2>
 
 <div>
@@ -67,5 +73,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { id=ViewBag.Asset.Id })
 </p>

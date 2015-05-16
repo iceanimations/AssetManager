@@ -17,8 +17,7 @@ namespace AssetManager.Controllers
         // GET: CategoryRules
         public ActionResult Index()
         {
-            var categoryRules = db.CategoryRules.Include(c => c.Category).Include(c => c.User);
-            return View(categoryRules.ToList());
+            return View(db.CategoryRules.ToList());
         }
 
         // GET: CategoryRules/Details/5

@@ -17,7 +17,7 @@ namespace AssetManager.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Categories.Include(c => c.Project).ToList());
+            return View(db.Categories.ToList());
         }
 
         // GET: Categories/Details/5

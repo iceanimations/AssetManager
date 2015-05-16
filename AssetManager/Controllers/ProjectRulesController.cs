@@ -17,8 +17,7 @@ namespace AssetManager.Controllers
         // GET: ProjectRules
         public ActionResult Index()
         {
-            var projectRules = db.ProjectRules.Include(p => p.Project).Include(p => p.User);
-            return View(projectRules.ToList());
+            return View(db.ProjectRules.ToList());
         }
 
         // GET: ProjectRules/Details/5

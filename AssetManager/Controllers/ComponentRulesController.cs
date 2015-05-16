@@ -17,8 +17,7 @@ namespace AssetManager.Controllers
         // GET: ComponentRules
         public ActionResult Index()
         {
-            var componentRules = db.ComponentRules.Include(c => c.Component).Include(c => c.User);
-            return View(componentRules.ToList());
+            return View(db.ComponentRules.ToList());
         }
 
         // GET: ComponentRules/Details/5

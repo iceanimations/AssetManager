@@ -27,7 +27,9 @@ namespace AssetManager.Controllers
                 return HttpNotFound();
             }
             var cats = project.Categories;
-            ViewBag.ProjectId = id;
+            
+            ViewBag.Project = project;
+            
             if (cats.Count == 0)
             {
                 return View(new List<Asset>());
@@ -68,7 +70,7 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectId = project.Id;
+            ViewBag.Project = project;
             ViewBag.CategoryId = new SelectList(project.Categories, "Id", "Name");
             return View();
         }
@@ -86,9 +88,10 @@ namespace AssetManager.Controllers
                 db.Assets.Add(asset);
                 db.SaveChanges();
                 var project = db.Categories.Find(asset.CategoryId).Project;
-                return RedirectToAction("Index", new { id=project.Id});
+                return RedirectToAction("Index", new { id=project.Id });
             }
-
+            var cat = db.Categories.Find(asset.CategoryId);
+            ViewBag.Project = db.Projects.Find(cat.ProjectId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
             return View(asset);
         }
@@ -106,7 +109,7 @@ namespace AssetManager.Controllers
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
-            ViewBag.ProjectId = asset.Category.Project.Id;
+            ViewBag.Project = asset.Category.Project;
             return View(asset);
         }
 
@@ -125,6 +128,7 @@ namespace AssetManager.Controllers
                 return RedirectToAction("Index", new { id=project.Id });
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
+            ViewBag.Project = asset.Category.Project;
             return View(asset);
         }
 
@@ -140,7 +144,7 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectId = asset.Category.Project.Id;
+            ViewBag.Project = asset.Category.Project;
             return View(asset);
         }
 

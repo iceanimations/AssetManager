@@ -4,10 +4,15 @@
     ViewBag.Title = "Components";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ");
+    $("#locBar").append("<span>@ViewBag.Asset.Name</span>");
+</script>
+
 <h2>Components</h2>
 
 <p>
-    @Html.ActionLink("Create New Component", "Create")
+    @Html.ActionLink("Create New Component", "Create", new { id=ViewBag.Asset.Id })
 </p>
 <table class="table">
     <tr>

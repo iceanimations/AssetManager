@@ -15,10 +15,20 @@ namespace AssetManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Components
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            var components = db.Components.Include(c => c.Asset);
-            return View(components.ToList());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var asset = db.Assets.Find(id);
+            if (asset == null)
+            {
+                HttpNotFound();
+            }
+            ViewBag.Project = asset.Category.Project;
+            ViewBag.Asset = asset;
+            return View(asset.Components.ToList());
         }
 
         // GET: Components/Details/5
@@ -33,12 +43,25 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
             return View(component);
         }
 
         // GET: Components/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Asset asset = db.Assets.Find(id);
+            if (asset == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Project = asset.Category.Project;
+            ViewBag.Asset = asset;
             ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name");
             return View();
         }
@@ -50,14 +73,16 @@ namespace AssetManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,DateTimeCreated,DateTimeUpdated")] Component component)
         {
+            var asset = db.Assets.Find(component.AssetId);
             if (ModelState.IsValid)
             {
                 component.DateTimeUpdated = component.DateTimeCreated = DateTime.Now;
                 db.Components.Add(component);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id=asset.Id});
             }
-
+            ViewBag.Project = asset.Category.Project;
+            ViewBag.Asset = asset;
             ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
             return View(component);
         }
@@ -74,6 +99,8 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
             ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
             return View(component);
         }
@@ -90,8 +117,10 @@ namespace AssetManager.Controllers
                 component.DateTimeUpdated = DateTime.Now;
                 db.Entry(component).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { db.Assets.Find(component.AssetId).Id });
             }
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
             ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
             return View(component);
         }
@@ -108,6 +137,8 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
             return View(component);
         }
 
@@ -117,9 +148,10 @@ namespace AssetManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Component component = db.Components.Find(id);
+            var asset = component.Asset;
             db.Components.Remove(component);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id=asset.Id });
         }
 
         protected override void Dispose(bool disposing)

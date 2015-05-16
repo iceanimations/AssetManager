@@ -4,10 +4,14 @@
     ViewBag.Title = "Assets";
 }
 
+<script>
+    $("#locBar").append("<span>@ViewBag.Project.Name</span>");
+</script>
+
 <h2>Assets</h2>
 
 <p>
-    @Html.ActionLink("Create New Asset", "Create", new { id=ViewBag.ProjectId })
+    @Html.ActionLink("Create New Asset", "Create", new { id=ViewBag.Project.Id })
 </p>
 <table class="table">
     <tr>
@@ -29,7 +33,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            <a href="@Url.Action("Index", "Components", new { id=item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category.Name)

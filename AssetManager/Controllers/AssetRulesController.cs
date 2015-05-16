@@ -17,8 +17,7 @@ namespace AssetManager.Controllers
         // GET: AssetRules
         public ActionResult Index()
         {
-            var assetRules = db.AssetRules.Include(a => a.Asset).Include(a => a.User);
-            return View(assetRules.ToList());
+            return View(db.AssetRules.ToList());
         }
 
         // GET: AssetRules/Details/5

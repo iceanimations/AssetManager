@@ -12,8 +12,7 @@ namespace AssetManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            var projects = db.Projects.ToList();
-            return View(projects);
+            return View(db.Projects.ToList());
         }
 
         public ActionResult About()

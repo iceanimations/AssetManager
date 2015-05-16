@@ -4,6 +4,11 @@
     ViewBag.Title = "Create Project";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Projects")>Projects</a> > ")
+    $("#locBar").append("<span>Create New Project</span>");
+</script>
+
 <h2>Create New Project</h2>
 
 

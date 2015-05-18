@@ -39,7 +39,7 @@ namespace AssetManager.Controllers
             {
                 assets.AddRange(cat.Assets);
             }
-            return View(assets.ToList());
+            return View(assets);
         }
 
         // GET: Assets/Details/5
@@ -108,8 +108,9 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
-            ViewBag.Project = asset.Category.Project;
+            var project = asset.Category.Project;
+            ViewBag.Project = project;
+            ViewBag.CategoryId = new SelectList(project.Categories, "Id", "Name", asset.CategoryId);
             return View(asset);
         }
 

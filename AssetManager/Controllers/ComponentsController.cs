@@ -60,9 +60,15 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Project = asset.Category.Project;
+            var project = asset.Category.Project;
+            var assets = new List<Asset>();
+            foreach (var cat in project.Categories)
+            {
+                assets.AddRange(cat.Assets);
+            }
+            ViewBag.Project = project;
             ViewBag.Asset = asset;
-            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name");
+            ViewBag.AssetId = new SelectList(assets, "Id", "Name");
             return View();
         }
 
@@ -99,9 +105,15 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Project = component.Asset.Category.Project;
+            var project = component.Asset.Category.Project;
+            var assets = new List<Asset>();
+            foreach (var cat in project.Categories)
+            {
+                assets.AddRange(cat.Assets);
+            }
+            ViewBag.Project = project;
             ViewBag.Asset = component.Asset;
-            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
+            ViewBag.AssetId = new SelectList(assets, "Id", "Name", component.AssetId);
             return View(component);
         }
 

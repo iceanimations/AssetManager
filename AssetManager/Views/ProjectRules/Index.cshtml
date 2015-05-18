@@ -4,6 +4,10 @@
     ViewBag.Title = "Project Rules";
 }
 
+<script>
+    $("#locBar").append("<span>Project Rules</span>");
+</script>
+
 <h2>Project Rules</h2>
 
 <p>
@@ -29,9 +33,9 @@
             @Html.DisplayFor(modelItem => item.User.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "Edit", new { projectId=item.ProjectId, userId = item.UserId }) |
+            <!--@@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |-->
+            @Html.ActionLink("Delete", "Delete", new { projectId = item.ProjectId, userId = item.UserId })
         </td>
     </tr>
 }

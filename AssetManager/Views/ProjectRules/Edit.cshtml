@@ -4,6 +4,11 @@
     ViewBag.Title = "Edit Project Rule";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "ProjectRules")>Project Rules</a> > ")
+    $("#locBar").append("<span>@ViewBag.Project.Name - @ViewBag.User.Name</span>");
+</script>
+
 <h2>Edit Project Rule</h2>
 
 
@@ -14,9 +19,22 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ProjectId)
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-        @Html.HiddenFor(model => model.UserId)
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

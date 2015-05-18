@@ -63,17 +63,19 @@ namespace AssetManager.Controllers
         }
 
         // GET: ProjectRules/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? projectId, int? userId)
         {
-            if (id == null)
+            if (projectId == null || userId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectRule projectRule = db.ProjectRules.Find(id);
+            ProjectRule projectRule = db.ProjectRules.Find(projectId, userId);
             if (projectRule == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.Project = db.Projects.Find(projectRule.ProjectId);
+            ViewBag.User = db.Users.Find(projectRule.UserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", projectRule.ProjectId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", projectRule.UserId);
             return View(projectRule);
@@ -92,32 +94,36 @@ namespace AssetManager.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.Project = db.Projects.Find(projectRule.ProjectId);
+            ViewBag.User = db.Users.Find(projectRule.UserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", projectRule.ProjectId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", projectRule.UserId);
             return View(projectRule);
         }
 
         // GET: ProjectRules/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? projectId, int? userId)
         {
-            if (id == null)
+            if (projectId == null || userId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectRule projectRule = db.ProjectRules.Find(id);
+            ProjectRule projectRule = db.ProjectRules.Find(projectId, userId);
             if (projectRule == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.Project = db.Projects.Find(projectRule.ProjectId);
+            ViewBag.User = db.Users.Find(projectRule.UserId);
             return View(projectRule);
         }
 
         // POST: ProjectRules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int projectId, int userId)
         {
-            ProjectRule projectRule = db.ProjectRules.Find(id);
+            ProjectRule projectRule = db.ProjectRules.Find(projectId, userId);
             db.ProjectRules.Remove(projectRule);
             db.SaveChanges();
             return RedirectToAction("Index");

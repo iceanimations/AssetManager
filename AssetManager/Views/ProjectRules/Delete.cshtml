@@ -4,6 +4,11 @@
     ViewBag.Title = "Delete Project Rule";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "ProjectRules")>Project Rules</a> > ")
+    $("#locBar").append("<span>@ViewBag.Project.Name - @ViewBag.User.Name</span>");
+</script>
+
 <h2>Delete Project Rule</h2>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -25,7 +30,7 @@
         <dd>
             @Html.DisplayFor(model => model.User.Name)
         </dd>
-
+        @Html.
     </dl>
 
     @using (Html.BeginForm()) {

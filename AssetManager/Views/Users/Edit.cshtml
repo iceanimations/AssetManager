@@ -4,6 +4,11 @@
     ViewBag.Title = "Edit User";
 }
 
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Users")>Users</a> > ")
+    $("#locBar").append("<span>@Model.Name</span>");
+</script>
+
 <h2>Edit User</h2>
 
 

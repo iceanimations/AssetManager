@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
+using AssetManager.ViewModels;
 
 namespace AssetManager.Controllers
 {
@@ -38,23 +39,26 @@ namespace AssetManager.Controllers
         // GET: Projects/Create
         public ActionResult Create()
         {
+            var model = new ProjectViewModel();
+            model.UserList = new SelectList(db.Users.ToList(), "Id", "Name");
             ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type");
-            return View();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ProjectTypeId,DateTimeCreated")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
         {
             if (ModelState.IsValid)
             {
-                project.DateTimeCreated = DateTime.Now;
-                db.Projects.Add(project);
+                viewModelProject.DateTimeCreated = DateTime.Now;
+                //TODO:
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            //TODO: handle the userlist
             ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", project.ProjectTypeId);
-            return View(project);
+            return View(viewModelProject);
         }
 
         // GET: Projects/Edit/5

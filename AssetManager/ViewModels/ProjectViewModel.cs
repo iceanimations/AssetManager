@@ -35,7 +35,7 @@ namespace AssetManager.ViewModels
         public int ProjectTypeId { get; set; }
 
         public int[] UserIds { get; set; }
-        public SelectList UserList { get; set; }
+        public MultiSelectList UserList { get; set; }
 
         [Display(Name="Creation Date")]
         [ScaffoldColumn(false)]

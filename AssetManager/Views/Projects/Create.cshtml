@@ -7,10 +7,6 @@
 <script type="text/javascript">
     $("#locBar").append("<a href=@Url.Action("Index", "Projects")>Projects</a> > ")
     $("#locBar").append("<span>Create New Project</span>");
-
-    $(document).ready(function () {
-        $("#user-select").multiselect();
-    });
 </script>
 
 <h2>Create New Project</h2>
@@ -43,15 +39,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UserIds, "Users", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-
                 @Html.DropDownListFor(model => model.UserIds, new SelectList(Model.UserList, "value", "text"), new { @class = "multiselect form-control", multiple = "multiple", id="user-select"})
-                <!--<select id="user-select" multiple="multiple">
-                    @@foreach(var user in ViewBag.Users)
-                    {
-                        <option value="@@user.Id">@@user.Name</option>
-                    }
-                </select>
-                -->
                 @Html.ValidationMessageFor(model => model.UserIds, "", new { @class = "text-danger" })
             </div>
         </div>

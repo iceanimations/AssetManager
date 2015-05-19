@@ -51,13 +51,29 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                viewModelProject.DateTimeCreated = DateTime.Now;
-                //TODO:
+                // create the project
+                var project = new Project();
+                project.Name = viewModelProject.Name;
+                project.Description = viewModelProject.Description;
+                project.DateTimeCreated = DateTime.Now;
+                project.ProjectTypeId = viewModelProject.ProjectTypeId;
+                db.Projects.Add(project);
                 db.SaveChanges();
+                // create project rules
+                var users = viewModelProject.UserIds;
+                if (users.Length > 0)
+                {
+                    foreach (var id in users)
+                    {
+                        var projectRule = new ProjectRule {ProjectId=project.Id, UserId=id};
+                        db.ProjectRules.Add(projectRule);
+                    }
+                    db.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
-            //TODO: handle the userlist
-            ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", project.ProjectTypeId);
+            viewModelProject.UserList = new SelectList(db.Users.ToList(), "Id", "Name", viewModelProject.UserIds);
+            ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", viewModelProject.ProjectTypeId);
             return View(viewModelProject);
         }
 
@@ -73,8 +89,21 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            var viewModelProject = new ProjectViewModel
+                {Id=project.Id,
+                Name=project.Name,
+                Description=project.Description,
+                ProjectTypeId=project.ProjectTypeId,
+                DateTimeCreated=project.DateTimeCreated};
+            List<int> userIds = new List<int>();
+            foreach (var pr in project.ProjectRules)
+            {
+                userIds.Add(pr.UserId);
+            }
+            viewModelProject.UserIds = userIds.ToArray();
+            viewModelProject.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
             ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", project.ProjectTypeId);
-            return View(project);
+            return View(viewModelProject);
         }
 
         // POST: Projects/Edit/5
@@ -82,16 +111,37 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ProjectTypeId,DateTimeCreated")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
         {
             if (ModelState.IsValid)
             {
+                var project = new Project
+                {
+                    Id=viewModelProject.Id,
+                    Name = viewModelProject.Name,
+                    Description = viewModelProject.Description,
+                    ProjectTypeId = viewModelProject.ProjectTypeId,
+                    DateTimeCreated = viewModelProject.DateTimeCreated
+                };
                 db.Entry(project).State = EntityState.Modified;
+                db.SaveChanges();
+                var pr = db.ProjectRules.ToList();
+                foreach (var p in pr)
+                {
+                    if (p.ProjectId == project.Id)
+                        db.ProjectRules.Remove(p);
+                }
+                db.SaveChanges();
+                for (var i = 0; i < viewModelProject.UserIds.Length; i++ )
+                {
+                    db.ProjectRules.Add(new ProjectRule { ProjectId = project.Id, UserId = viewModelProject.UserIds[i] });
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", project.ProjectTypeId);
-            return View(project);
+            viewModelProject.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
+            ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", viewModelProject.ProjectTypeId);
+            return View(viewModelProject);
         }
 
         // GET: Projects/Delete/5

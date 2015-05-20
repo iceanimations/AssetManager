@@ -19,15 +19,13 @@ namespace AssetManager.Models
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Component> Components { get; set; }
 
+        // Rules
         public DbSet<ProjectRule> ProjectRules { get; set; }
-
         public DbSet<CategoryRule> CategoryRules { get; set; }
-
         public DbSet<AssetRule> AssetRules { get; set; }
-
         public DbSet<ComponentRule> ComponentRules { get; set; }
 
-        public System.Data.Entity.DbSet<AssetManager.Models.ProjectType> ProjectTypes { get; set; }
+        public DbSet<ProjectType> ProjectTypes { get; set; }
         
 
     }

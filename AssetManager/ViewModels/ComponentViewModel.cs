@@ -16,13 +16,13 @@ namespace AssetManager.ViewModels
 
         public ComponentViewModel()
         {
-            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
+            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name")
         }
         public int Id { get; set; }
         [Required]
         [DisplayName("Component Name")]
         public string Name { get; set; }
-        
+
         [Required]
         [ForeignKey("Asset")]
         public int AssetId { get; set; }

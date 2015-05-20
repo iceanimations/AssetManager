@@ -61,7 +61,7 @@ namespace AssetManager.Controllers
                 db.SaveChanges();
                 // create project rules
                 var users = viewModelProject.UserIds;
-                if (users.Length > 0)
+                if (users != null)
                 {
                     foreach (var id in users)
                     {

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
+using AssetManager.ViewModels;
 
 namespace AssetManager.Controllers
 {
@@ -70,9 +71,10 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            var model = new AssetViewModel();
             ViewBag.Project = project;
             ViewBag.CategoryId = new SelectList(project.Categories, "Id", "Name");
-            return View();
+            return View(model);
         }
 
         // POST: Assets/Create
@@ -80,20 +82,38 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail")] Asset asset)
+        public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds")] AssetViewModel viewModelAsset)
         {
             if (ModelState.IsValid)
             {
-                asset.DateTimeCreated = DateTime.Now;
+                var asset = new Asset
+                {
+                    Name=viewModelAsset.Name,
+                    CategoryId=viewModelAsset.CategoryId,
+                    DateTimeCreated = DateTime.Now
+                };
                 db.Assets.Add(asset);
                 db.SaveChanges();
+                if (viewModelAsset.UserIds != null)
+                {
+                    foreach (var uid in viewModelAsset.UserIds)
+                    {
+                        var ar = new AssetRule
+                        {
+                            AssetId = asset.Id,
+                            UserId = uid
+                        };
+                        db.AssetRules.Add(ar);
+                    }
+                    db.SaveChanges();
+                }
                 var project = db.Categories.Find(asset.CategoryId).Project;
                 return RedirectToAction("Index", new { id=project.Id });
             }
-            var cat = db.Categories.Find(asset.CategoryId);
+            var cat = db.Categories.Find(viewModelAsset.CategoryId);
             ViewBag.Project = db.Projects.Find(cat.ProjectId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
-            return View(asset);
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", viewModelAsset.CategoryId);
+            return View(viewModelAsset);
         }
 
         // GET: Assets/Edit/5

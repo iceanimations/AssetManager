@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
+using AssetManager.ViewModels;
 
 namespace AssetManager.Controllers
 {
@@ -38,8 +39,10 @@ namespace AssetManager.Controllers
         // GET: Categories/Create
         public ActionResult Create()
         {
+            var model = new CategoryViewModel();
+            model.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
-            return View();
+            return View(model);
         }
 
         // POST: Categories/Create
@@ -47,17 +50,36 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,ProjectId,DateTimeCreated")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Name,ProjectId,UserIds,DateTimeCreated")] CategoryViewModel viewModelCategory)
         {
             if (ModelState.IsValid)
             {
-                category.DateTimeCreated = DateTime.Now;
+                var category = new Category
+                {
+                    Name=viewModelCategory.Name,
+                    ProjectId=viewModelCategory.ProjectId,
+                    DateTimeCreated = DateTime.Now
+                };
                 db.Categories.Add(category);
                 db.SaveChanges();
+                if (viewModelCategory.UserIds != null)
+                {
+                    foreach (var uid in viewModelCategory.UserIds)
+                    {
+                        var cr = new CategoryRule
+                        {
+                            CategoryId = category.Id,
+                            UserId = uid
+                        };
+                        db.CategoryRules.Add(cr);
+                    }
+                    db.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", category.ProjectId);
-            return View(category);
+            viewModelCategory.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", viewModelCategory.ProjectId);
+            return View(viewModelCategory);
         }
 
         // GET: Categories/Edit/5

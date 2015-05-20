@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
+using AssetManager.ViewModels;
 
 namespace AssetManager.Controllers
 {
@@ -69,7 +70,7 @@ namespace AssetManager.Controllers
             ViewBag.Project = project;
             ViewBag.Asset = asset;
             ViewBag.AssetId = new SelectList(assets, "Id", "Name");
-            return View();
+            return View(new ComponentViewModel());
         }
 
         // POST: Components/Create
@@ -77,20 +78,41 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,DateTimeCreated,DateTimeUpdated")] Component component)
+        public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModel viewModelComponent)
         {
-            var asset = db.Assets.Find(component.AssetId);
+            var asset = db.Assets.Find(viewModelComponent.AssetId);
             if (ModelState.IsValid)
             {
-                component.DateTimeUpdated = component.DateTimeCreated = DateTime.Now;
+                var component = new Component
+                {
+                    Name = viewModelComponent.Name,
+                    AssetId = viewModelComponent.AssetId,
+                    Locked = viewModelComponent.Locked,
+                    Description = viewModelComponent.Description,
+                    DateTimeCreated = DateTime.Now,
+                    DateTimeUpdated = DateTime.Now
+                };
                 db.Components.Add(component);
                 db.SaveChanges();
+                if (viewModelComponent.UserIds != null)
+                {
+                    foreach (var uid in viewModelComponent.UserIds)
+                    {
+                        var cr = new ComponentRule
+                        {
+                            ComponentId=component.Id,
+                            UserId=uid
+                        };
+                        db.ComponentRules.Add(cr);
+                    }
+                    db.SaveChanges();
+                }
                 return RedirectToAction("Index", new { id=asset.Id});
             }
             ViewBag.Project = asset.Category.Project;
             ViewBag.Asset = asset;
-            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
-            return View(component);
+            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", viewModelComponent.AssetId);
+            return View(viewModelComponent);
         }
 
         // GET: Components/Edit/5

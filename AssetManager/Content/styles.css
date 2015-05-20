@@ -21,6 +21,9 @@ a:focus {outline: none}
     width: 90%;
 }
 .loc-bar {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 20px;
+    background-color: #272727;
+    font-size: 11pt;
+    padding: 3px;
+    border-radius: 3px;
 }

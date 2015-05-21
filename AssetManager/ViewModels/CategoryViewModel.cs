@@ -15,8 +15,7 @@ namespace AssetManager.ViewModels
 
         public CategoryViewModel()
         {
-            //Assets = new HashSet<Asset>();
-            //CategoryRules = new HashSet<CategoryRule>();
+            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
         }
         public int Id { get; set; }
         
@@ -30,10 +29,6 @@ namespace AssetManager.ViewModels
 
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }
-
-        //public virtual Project Project { get; set; }
-        //public virtual ICollection<Asset> Assets { get; set; }
-        //public virtual ICollection<CategoryRule> CategoryRules { get; set; }
 
         [Display(Name="Creation Date")]
         public DateTime DateTimeCreated { get; set; }

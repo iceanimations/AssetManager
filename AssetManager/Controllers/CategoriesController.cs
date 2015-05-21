@@ -39,15 +39,10 @@ namespace AssetManager.Controllers
         // GET: Categories/Create
         public ActionResult Create()
         {
-            var model = new CategoryViewModel();
-            model.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
-            return View(model);
+            return View(new CategoryViewModel());
         }
 
-        // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,ProjectId,UserIds,DateTimeCreated")] CategoryViewModel viewModelCategory)
@@ -77,7 +72,6 @@ namespace AssetManager.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            viewModelCategory.UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", viewModelCategory.ProjectId);
             return View(viewModelCategory);
         }
@@ -94,8 +88,24 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            var model = new CategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                ProjectId = category.ProjectId,
+                DateTimeCreated = category.DateTimeCreated
+            };
+            var UserIds = new List<int>();
+            foreach (var cr in db.CategoryRules.ToList())
+            {
+                if (cr.CategoryId == category.Id)
+                {
+                    UserIds.Add(cr.UserId);
+                }
+            }
+            model.UserIds = UserIds.ToArray();
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", category.ProjectId);
-            return View(category);
+            return View(model);
         }
 
         // POST: Categories/Edit/5
@@ -103,16 +113,43 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,ProjectId,DateTimeCreated")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Name,ProjectId,UserIds,DateTimeCreated")] CategoryViewModel viewModelCategory)
         {
             if (ModelState.IsValid)
             {
+                var category = new Category
+                {
+                    Id = viewModelCategory.Id,
+                    Name = viewModelCategory.Name,
+                    ProjectId = viewModelCategory.ProjectId,
+                    DateTimeCreated = viewModelCategory.DateTimeCreated
+                };
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
+                foreach (var cr in db.CategoryRules.ToList())
+                {
+                    if (cr.CategoryId == viewModelCategory.Id)
+                    {
+                        db.CategoryRules.Remove(cr);
+                    }
+                }
+                db.SaveChanges();
+                if (viewModelCategory.UserIds != null)
+                {
+                    foreach (var uid in viewModelCategory.UserIds)
+                    {
+                        db.CategoryRules.Add(new CategoryRule
+                        {
+                            UserId = uid,
+                            CategoryId = viewModelCategory.Id
+                        });
+                    }
+                    db.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", category.ProjectId);
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", viewModelCategory.ProjectId);
+            return View(viewModelCategory);
         }
 
         // GET: Categories/Delete/5

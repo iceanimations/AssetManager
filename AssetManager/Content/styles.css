@@ -27,3 +27,16 @@ a:focus {outline: none}
     padding: 3px;
     border-radius: 3px;
 }
+
+input[type=text] {
+    background-color: #757575;
+    color: white;
+}
+option {
+    background-color: #757575;
+    color: white;
+}
+select.form-control {
+    background-color: #757575;
+    color: white;
+}

@@ -70,7 +70,7 @@ namespace AssetManager.Controllers
             ViewBag.Project = project;
             ViewBag.Asset = asset;
             ViewBag.AssetId = new SelectList(assets, "Id", "Name");
-            return View(new ComponentViewModelCreate());
+            return View(new ComponentViewModel());
         }
 
         // POST: Components/Create
@@ -78,7 +78,7 @@ namespace AssetManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModelCreate viewModelComponent)
+        public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModel viewModelComponent)
         {
             var asset = db.Assets.Find(viewModelComponent.AssetId);
             if (ModelState.IsValid)

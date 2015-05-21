@@ -12,11 +12,10 @@ namespace AssetManager.ViewModels
     public class ProjectViewModel
     {
         ApplicationDbContext db = new ApplicationDbContext();
+     
         public ProjectViewModel()
         {
-            //UserIds = new int[db.Users.Count()];
-            //ProjectRules = new HashSet<ProjectRule>();
-            //Categories = new HashSet<Category>();
+            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
         }
         public int Id { get; set; }
         

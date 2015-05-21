@@ -16,7 +16,7 @@ namespace AssetManager.ViewModels
 
         public ComponentViewModel()
         {
-            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name")
+            UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
         }
         public int Id { get; set; }
         [Required]

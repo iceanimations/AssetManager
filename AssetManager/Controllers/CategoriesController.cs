@@ -152,6 +152,61 @@ namespace AssetManager.Controllers
             return View(viewModelCategory);
         }
 
+        public ActionResult EditRules(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = db.Categories.Find(id);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            var model = new CategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
+            var UserIds = new List<int>();
+            foreach (var cr in db.CategoryRules.ToList())
+            {
+                if (cr.CategoryId == category.Id)
+                {
+                    UserIds.Add(cr.UserId);
+                }
+            }
+            model.UserIds = UserIds.ToArray();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRules([Bind(Include = "Id,UserIds")] CategoryViewModel viewModelCategory)
+        {
+            foreach (var cr in db.CategoryRules.ToList())
+            {
+                if (cr.CategoryId == viewModelCategory.Id)
+                {
+                    db.CategoryRules.Remove(cr);
+                }
+            }
+            db.SaveChanges();
+            if (viewModelCategory.UserIds != null)
+            {
+                foreach (var uid in viewModelCategory.UserIds)
+                {
+                    db.CategoryRules.Add(new CategoryRule
+                    {
+                        UserId = uid,
+                        CategoryId = viewModelCategory.Id
+                    });
+                }
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
         // GET: Categories/Delete/5
         public ActionResult Delete(int? id)
         {

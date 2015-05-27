@@ -1,11 +1,15 @@
-﻿@model AssetManager.ViewModels.ProjectViewModel
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model AssetManager.ViewModels.CategoryViewModel
 
 @{
-    ViewBag.Title = "Edit Project Rules";
+    ViewBag.Title = "Edit Category Rules";
 }
 
 <script>
-    $("#locBar").append("<a href=@Url.Action("Index", "Projects")>Projects</a> > ")
+    $("#locBar").append("<a href=@Url.Action("Index", "Categories")>Categories</a> > ")
     $("#locBar").append("<span>@Model.Name</span>");
 </script>
 
@@ -15,7 +19,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

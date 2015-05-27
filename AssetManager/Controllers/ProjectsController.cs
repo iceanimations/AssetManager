@@ -85,11 +85,13 @@ namespace AssetManager.Controllers
                 return HttpNotFound();
             }
             var viewModelProject = new ProjectViewModel
-                {Id=project.Id,
+            {
+                Id=project.Id,
                 Name=project.Name,
                 Description=project.Description,
                 ProjectTypeId=project.ProjectTypeId,
-                DateTimeCreated=project.DateTimeCreated};
+                DateTimeCreated=project.DateTimeCreated
+            };
             List<int> userIds = new List<int>();
             foreach (var pr in project.ProjectRules)
             {
@@ -148,10 +150,7 @@ namespace AssetManager.Controllers
             var viewModelProject = new ProjectViewModel
             {
                 Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                ProjectTypeId = project.ProjectTypeId,
-                DateTimeCreated = project.DateTimeCreated
+                Name = project.Name
             };
             List<int> userIds = new List<int>();
             foreach (var pr in project.ProjectRules)
@@ -159,7 +158,6 @@ namespace AssetManager.Controllers
                 userIds.Add(pr.UserId);
             }
             viewModelProject.UserIds = userIds.ToArray();
-            ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", project.ProjectTypeId);
             return View(viewModelProject);
         }
 
@@ -167,34 +165,19 @@ namespace AssetManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditRules([Bind(Include = "Id,UserIds")] ProjectViewModel viewModelProject)
         {
-            //if (ModelState.IsValid)
-            //{
-                //var project = new Project
-                //{
-                //    Id = viewModelProject.Id,
-                //    Name = viewModelProject.Name,
-                //    Description = viewModelProject.Description,
-                //    ProjectTypeId = viewModelProject.ProjectTypeId,
-                //    DateTimeCreated = viewModelProject.DateTimeCreated
-                //};
-                //db.Entry(project).State = EntityState.Modified;
-                //db.SaveChanges();
-                var pr = db.ProjectRules.ToList();
-                foreach (var p in pr)
-                {
-                    if (p.ProjectId == viewModelProject.Id)
-                        db.ProjectRules.Remove(p);
-                }
-                db.SaveChanges();
-                for (var i = 0; i < viewModelProject.UserIds.Length; i++)
-                {
-                    db.ProjectRules.Add(new ProjectRule { ProjectId = viewModelProject.Id, UserId = viewModelProject.UserIds[i] });
-                }
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            //}
-            //ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", viewModelProject.ProjectTypeId);
-            //return View(viewModelProject);
+            var pr = db.ProjectRules.ToList();
+            foreach (var p in pr)
+            {
+                if (p.ProjectId == viewModelProject.Id)
+                    db.ProjectRules.Remove(p);
+            }
+            db.SaveChanges();
+            for (var i = 0; i < viewModelProject.UserIds.Length; i++)
+            {
+                db.ProjectRules.Add(new ProjectRule { ProjectId = viewModelProject.Id, UserId = viewModelProject.UserIds[i] });
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Projects/Delete/5

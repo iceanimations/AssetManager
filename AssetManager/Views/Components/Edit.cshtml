@@ -1,4 +1,4 @@
-﻿@model AssetManager.Models.Component
+﻿@model AssetManager.ViewModels.ComponentViewModel
 
 @{
     ViewBag.Title = "Edit Component";
@@ -63,6 +63,15 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserIds, "Allowed Users", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.UserIds, new MultiSelectList(Model.UserList, "Value", "Text"), htmlAttributes: new { @class = "multiselect form-control", multiple = "multiple", id = "user-select" })
+                @Html.ValidationMessageFor(model => model.UserIds, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         @Html.HiddenFor(model => model.DateTimeCreated)
         @Html.HiddenFor(model => model.DateTimeUpdated)
         <div class="form-group">

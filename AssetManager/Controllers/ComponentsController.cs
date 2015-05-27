@@ -73,9 +73,6 @@ namespace AssetManager.Controllers
             return View(new ComponentViewModel());
         }
 
-        // POST: Components/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModel viewModelComponent)
@@ -115,7 +112,6 @@ namespace AssetManager.Controllers
             return View(viewModelComponent);
         }
 
-        // GET: Components/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -127,6 +123,22 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            var model = new ComponentViewModel
+            {
+                Id = component.Id,
+                Name = component.Name,
+                AssetId = component.AssetId,
+                FilePath = component.FilePath,
+                Locked = component.Locked,
+                Description = component.Description,
+                DateTimeCreated = component.DateTimeCreated
+            };
+            var UserIds = new List<int>();
+            foreach (var cr in component.ComponentRules)
+            {
+                UserIds.Add(cr.UserId);
+            }
+            model.UserIds = UserIds.ToArray();
             var project = component.Asset.Category.Project;
             var assets = new List<Asset>();
             foreach (var cat in project.Categories)
@@ -136,27 +148,47 @@ namespace AssetManager.Controllers
             ViewBag.Project = project;
             ViewBag.Asset = component.Asset;
             ViewBag.AssetId = new SelectList(assets, "Id", "Name", component.AssetId);
-            return View(component);
+            return View(model);
         }
 
-        // POST: Components/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,DateTimeCreated,DateTimeUpdated")] Component component)
+        public ActionResult Edit([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModel viewModelComponent)
         {
             if (ModelState.IsValid)
             {
+                var component = new Component
+                {
+                    Id = viewModelComponent.Id,
+                    Name = viewModelComponent.Name,
+                    AssetId = viewModelComponent.AssetId,
+                    FilePath = viewModelComponent.FilePath,
+                    Locked = viewModelComponent.Locked,
+                    Description = viewModelComponent.Description,
+                    DateTimeCreated = viewModelComponent.DateTimeCreated
+                };
                 component.DateTimeUpdated = DateTime.Now;
                 db.Entry(component).State = EntityState.Modified;
                 db.SaveChanges();
+                foreach (var cr in db.ComponentRules.ToList())
+                    if (cr.ComponentId == component.Id)
+                        db.ComponentRules.Remove(cr);
+                if (viewModelComponent.UserIds != null)
+                {
+                    foreach (var uid in viewModelComponent.UserIds)
+                        db.ComponentRules.Add(new ComponentRule
+                        {
+                            UserId = uid,
+                            ComponentId = component.Id
+                        });
+                    db.SaveChanges();
+                }
                 return RedirectToAction("Index", new { db.Assets.Find(component.AssetId).Id });
             }
-            ViewBag.Project = component.Asset.Category.Project;
-            ViewBag.Asset = component.Asset;
-            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", component.AssetId);
-            return View(component);
+            ViewBag.Asset = db.Components.Find(viewModelComponent.Id).Asset;
+            ViewBag.Project = ViewBag.Asset.Category.Project;
+            ViewBag.AssetId = new SelectList(db.Assets, "Id", "Name", viewModelComponent.AssetId);
+            return View(viewModelComponent);
         }
 
         // GET: Components/Delete/5

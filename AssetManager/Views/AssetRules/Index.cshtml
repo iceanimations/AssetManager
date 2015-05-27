@@ -29,9 +29,9 @@
             @Html.DisplayFor(modelItem => item.User.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "Edit", new { AssetId = item.AssetId, UserId = item.UserId }) |
+            <!--@@Html.ActionLink("Details", "Details", new { AssetId = item.AssetId, UserId = item.UserId }) |-->
+            @Html.ActionLink("Delete", "Delete", new { AssetId = item.AssetId, UserId = item.UserId })
         </td>
     </tr>
 }

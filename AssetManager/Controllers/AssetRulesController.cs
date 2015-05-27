@@ -21,13 +21,13 @@ namespace AssetManager.Controllers
         }
 
         // GET: AssetRules/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? assetId, int? userId)
         {
-            if (id == null)
+            if (assetId == null || userId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AssetRule assetRule = db.AssetRules.Find(id);
+            AssetRule assetRule = db.AssetRules.Find(assetId, userId);
             if (assetRule == null)
             {
                 return HttpNotFound();
@@ -43,9 +43,6 @@ namespace AssetManager.Controllers
             return View();
         }
 
-        // POST: AssetRules/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "AssetId,UserId")] AssetRule assetRule)
@@ -63,13 +60,13 @@ namespace AssetManager.Controllers
         }
 
         // GET: AssetRules/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? assetId, int? userId)
         {
-            if (id == null)
+            if (assetId == null || userId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AssetRule assetRule = db.AssetRules.Find(id);
+            AssetRule assetRule = db.AssetRules.Find(assetId, userId);
             if (assetRule == null)
             {
                 return HttpNotFound();
@@ -79,9 +76,6 @@ namespace AssetManager.Controllers
             return View(assetRule);
         }
 
-        // POST: AssetRules/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "AssetId,UserId")] AssetRule assetRule)
@@ -98,13 +92,13 @@ namespace AssetManager.Controllers
         }
 
         // GET: AssetRules/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? assetId, int? userId)
         {
-            if (id == null)
+            if (assetId == null || userId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AssetRule assetRule = db.AssetRules.Find(id);
+            AssetRule assetRule = db.AssetRules.Find(assetId, userId);
             if (assetRule == null)
             {
                 return HttpNotFound();
@@ -115,9 +109,9 @@ namespace AssetManager.Controllers
         // POST: AssetRules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int assetId, int? userId)
         {
-            AssetRule assetRule = db.AssetRules.Find(id);
+            AssetRule assetRule = db.AssetRules.Find(assetId, userId);
             db.AssetRules.Remove(assetRule);
             db.SaveChanges();
             return RedirectToAction("Index");

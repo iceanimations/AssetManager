@@ -17,8 +17,6 @@ namespace AssetManager.ViewModels
         public AssetViewModel()
         {
             UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
-            //Components = new HashSet<Component>();
-            //AssetRules = new HashSet<AssetRule>();
         }
         public int Id { get; set; }
         [Required]
@@ -31,10 +29,6 @@ namespace AssetManager.ViewModels
 
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }
-
-        //public virtual Category Category { get; set; }
-        //public virtual ICollection<Component> Components { get; set; }
-        //public virtual ICollection<AssetRule> AssetRules { get; set; }
 
         [StringLength(255)]
         public string Thumbnail { get; set; }

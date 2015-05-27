@@ -71,15 +71,11 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
-            var model = new AssetViewModel();
             ViewBag.Project = project;
             ViewBag.CategoryId = new SelectList(project.Categories, "Id", "Name");
-            return View(model);
+            return View(new AssetViewModel());
         }
 
-        // POST: Assets/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds")] AssetViewModel viewModelAsset)
@@ -116,7 +112,6 @@ namespace AssetManager.Controllers
             return View(viewModelAsset);
         }
 
-        // GET: Assets/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -128,29 +123,59 @@ namespace AssetManager.Controllers
             {
                 return HttpNotFound();
             }
+            var model = new AssetViewModel
+            {
+                Id = asset.Id,
+                Name = asset.Name,
+                CategoryId = asset.CategoryId,
+                DateTimeCreated = asset.DateTimeCreated
+            };
+            var UserIds = new List<int>();
+            foreach (var ar in db.AssetRules.ToList())
+                if (ar.AssetId == asset.Id)
+                    UserIds.Add(ar.UserId);
+            model.UserIds = UserIds.ToArray();
             var project = asset.Category.Project;
             ViewBag.Project = project;
             ViewBag.CategoryId = new SelectList(project.Categories, "Id", "Name", asset.CategoryId);
-            return View(asset);
+            return View(model);
         }
 
-        // POST: Assets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CategoryId,Thumbnail,DateTimeCreated")] Asset asset)
+        public ActionResult Edit([Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds, DateTimeCreated")] AssetViewModel viewModelAsset)
         {
             if (ModelState.IsValid)
             {
+                var asset = new Asset
+                {
+                    Id = viewModelAsset.Id,
+                    Name = viewModelAsset.Name,
+                    CategoryId = viewModelAsset.CategoryId,
+                    DateTimeCreated = viewModelAsset.DateTimeCreated
+                };
                 db.Entry(asset).State = EntityState.Modified;
                 db.SaveChanges();
-                var project = db.Categories.Find(asset.CategoryId).Project;
+                if (viewModelAsset.UserIds != null)
+                {
+                    foreach (var ar in db.AssetRules.ToList())
+                        if (ar.AssetId == viewModelAsset.Id)
+                            db.AssetRules.Remove(ar);
+                    db.SaveChanges();
+                    foreach (var uid in viewModelAsset.UserIds)
+                        db.AssetRules.Add(new AssetRule
+                        {
+                            UserId = uid,
+                            AssetId = viewModelAsset.Id
+                        });
+                    db.SaveChanges();
+                }
+                var project = db.Categories.Find(viewModelAsset.CategoryId).Project;
                 return RedirectToAction("Index", new { id=project.Id });
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", asset.CategoryId);
-            ViewBag.Project = asset.Category.Project;
-            return View(asset);
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", viewModelAsset.CategoryId);
+            ViewBag.Project = db.Assets.Find(viewModelAsset.Id).Category.Project;
+            return View(viewModelAsset);
         }
 
         // GET: Assets/Delete/5

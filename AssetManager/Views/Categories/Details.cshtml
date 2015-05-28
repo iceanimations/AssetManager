@@ -38,9 +38,22 @@
             @Html.DisplayFor(model => model.DateTimeCreated)
         </dd>
 
+        <dt>
+            @Html.LabelFor(model => model.CategoryRules, "Allowed Users", htmlAttributes: new { @class = "control-label" })
+        </dt>
+
+        <dd>
+            @foreach (var cr in Model.CategoryRules)
+            {
+                <ul>
+                    <li>@cr.User.Name</li>
+                </ul>
+            }
+        </dd>
+
     </dl>
 </div>
 <p>
-    <!--@@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |-->
+    @Html.ActionLink("Edit Rules", "EditRules", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

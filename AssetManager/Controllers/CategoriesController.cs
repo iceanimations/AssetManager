@@ -165,6 +165,7 @@ namespace AssetManager.Controllers
                 Id = category.Id,
                 Name = category.Name
             };
+            model.Project = category.Project;
             var UserIds = new List<int>();
             foreach (var cr in db.CategoryRules.ToList())
             {

@@ -10,7 +10,7 @@
 
 <script>
     $("#locBar").append("<a href=@Url.Action("Index", "Categories")>Categories</a> > ")
-    $("#locBar").append("<span>@Model.Name</span>");
+    $("#locBar").append("<span>@Model.Name (@Model.Project.Name)</span>");
 </script>
 
 <h2>Edit Rules</h2>

@@ -41,6 +41,19 @@
             @Html.DisplayFor(model => model.DateTimeCreated)
         </dd>
 
+        <dt>
+            @Html.LabelFor(model => model.AssetRules, "Allowed Users")
+        </dt>
+
+        <dd>
+            @foreach (var ar in Model.AssetRules)
+            {
+                <ul>
+                    <li>@ar.User.Name</li>
+                </ul>
+            }
+        </dd>
+
     </dl>
 </div>
 <p>

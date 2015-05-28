@@ -26,6 +26,7 @@ namespace AssetManager.ViewModels
         [Required]
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
+        public Project Project { get; set; }
 
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }

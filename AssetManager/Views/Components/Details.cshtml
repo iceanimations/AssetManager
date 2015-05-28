@@ -69,6 +69,19 @@
             @Html.DisplayFor(model => model.DateTimeUpdated)
         </dd>
 
+        <dt>
+            @Html.LabelFor(model => model.ComponentRules, "Allowed Users")
+        </dt>
+
+        <dd>
+            @foreach (var cr in Model.ComponentRules)
+            {
+                <ul>
+                    <li>@cr.User.Name</li>
+                </ul>
+            }
+        </dd>
+
     </dl>
 </div>
 <p>

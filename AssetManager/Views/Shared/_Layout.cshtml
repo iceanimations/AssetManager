@@ -4,16 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - IDAM</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
 
-    <script language="javascript" type="text/javascript" src="~/Scripts/custom2.js"></script>
     <script language="javascript" type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script language="javascript" type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
     <script language="javascript" type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
     <script language="javascript" type="text/javascript" src="~/Scripts/respond.min.js"></script>
     <script language="javascript" type="text/javascript" src="~/Scripts/bootstrap-multiselect.js"></script>
-    <link type="text/css" rel="stylesheet" href="~/Content/bootstrap-multiselect.css"/>
+    <link type="text/css" rel="stylesheet" href="~/Content/bootstrap-multiselect.css" />
+    <script language="javascript" type="text/javascript" src="~/Scripts/custom2.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
     <script>
         $(document).ready(function () {
             $("#user-select").multiselect();

@@ -8,12 +8,18 @@
     $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
     $("#locBar").append("<a href=@Url.Action("Index", "Components", new { id=ViewBag.Asset.Id })>@ViewBag.Asset.Name</a> > ")
     $("#locBar").append("<span>Create New Component</span>");
+    $(document).ready(function () {
+        $('#comp-file').change(function (event) {
+            var tmppath = URL.createObjectURL(event.target.files[0]);
+            console.log(tmppath);
+        });
+    });
 </script>
 
 <h3>Create Component</h3>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Components", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -35,12 +41,14 @@
                 @Html.ValidationMessageFor(model => model.AssetId, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        
         <div class="form-group">
-            @Html.LabelFor(model => model.FilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UploadedFile, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FilePath, "", new { @class = "text-danger" })
+                <span class="btn input-field">
+                    @Html.TextBoxFor(model => model.UploadedFile, new { type = "file" })
+                </span>
+                @Html.ValidationMessageFor(model => model.UploadedFile, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -65,7 +73,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UserIds, "Allowed Users", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBoxFor(model => model.UserIds, new MultiSelectList(Model.UserList, "Value", "Text"), htmlAttributes: new { @class = "multiselect form-control", multiple="multiple", id="user-select"})
+                @Html.ListBoxFor(model => model.UserIds, new MultiSelectList(Model.UserList, "Value", "Text"), htmlAttributes: new { @class = "multiselect form-control", multiple = "multiple", id = "user-select" })
                 @Html.ValidationMessageFor(model => model.UserIds, "", new { @class = "text-danger" })
             </div>
         </div>

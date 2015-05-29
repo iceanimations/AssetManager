@@ -70,13 +70,17 @@ namespace AssetManager.Controllers
             ViewBag.Project = project;
             ViewBag.Asset = asset;
             ViewBag.AssetId = new SelectList(assets, "Id", "Name");
-            return View(new ComponentViewModel());
+            var model = new ComponentViewModel();
+            model.Locked = true;
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,AssetId,FilePath,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] ComponentViewModel viewModelComponent)
+        //[Bind(Include = "Id,Name,AssetId,UploadedFile,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] 
+        public ActionResult Create(ComponentViewModel viewModelComponent)
         {
+            //var file = Request.Files[0];
             var asset = db.Assets.Find(viewModelComponent.AssetId);
             if (ModelState.IsValid)
             {

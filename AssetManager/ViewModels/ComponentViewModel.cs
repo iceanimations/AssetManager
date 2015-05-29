@@ -29,6 +29,7 @@ namespace AssetManager.ViewModels
 
         [StringLength(255)]
         public string FilePath { get; set; }
+        public HttpPostedFileBase UploadedFile { get; set; }
         public bool Locked { get; set; }
         public string Description { get; set; }
 

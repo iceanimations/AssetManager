@@ -78,13 +78,15 @@ namespace AssetManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds")] AssetViewModel viewModelAsset)
+        //[Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds")] 
+        public ActionResult Create(AssetViewModel viewModelAsset)
         {
             if (ModelState.IsValid)
             {
                 var asset = new Asset
                 {
                     Name=viewModelAsset.Name,
+                    //Thumbnail = viewModelAsset.Thumbnail,
                     CategoryId=viewModelAsset.CategoryId,
                     DateTimeCreated = DateTime.Now
                 };
@@ -127,6 +129,7 @@ namespace AssetManager.Controllers
             {
                 Id = asset.Id,
                 Name = asset.Name,
+                //Thumbnail = asset.Thumbnail,
                 CategoryId = asset.CategoryId,
                 DateTimeCreated = asset.DateTimeCreated
             };
@@ -151,6 +154,7 @@ namespace AssetManager.Controllers
                 {
                     Id = viewModelAsset.Id,
                     Name = viewModelAsset.Name,
+                    //Thumbnail = viewModelAsset.Thumbnail,
                     CategoryId = viewModelAsset.CategoryId,
                     DateTimeCreated = viewModelAsset.DateTimeCreated
                 };

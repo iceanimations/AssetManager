@@ -28,6 +28,7 @@ namespace AssetManager.Models
         public virtual ICollection<ComponentRule> ComponentRules { get; set; }
 
         [StringLength(255)]
+        [DisplayName("File Path")]
         public string FilePath { get; set; }
         public bool Locked { get; set; }
         public string Description { get; set; }

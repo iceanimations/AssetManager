@@ -30,8 +30,7 @@ namespace AssetManager.ViewModels
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }
 
-        [StringLength(255)]
-        public string Thumbnail { get; set; }
+        public HttpPostedFileBase Thumbnail { get; set; }
         [Display(Name="Creation Date")]
         public DateTime DateTimeCreated { get; set; }
     }

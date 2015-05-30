@@ -43,7 +43,7 @@
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.UploadedFile, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UploadedFile, "File", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <span class="btn input-field">
                     @Html.TextBoxFor(model => model.UploadedFile, new { type = "file" })

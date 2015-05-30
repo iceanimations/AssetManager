@@ -42,8 +42,8 @@
             <div class="col-md-10">
                 <span class="btn input-field">
                     @Html.TextBoxFor(model => model.Thumbnail, htmlAttributes: new { type = "file" })
-                    @Html.ValidationMessageFor(model => model.Thumbnail, "", new { @class = "text-danger" })
                 </span>
+                @Html.ValidationMessageFor(model => model.Thumbnail, "", new { @class = "text-danger" })
             </div>
         </div>
 

@@ -23,8 +23,7 @@ namespace AssetManager.ViewModels
         [Display(Name="Project Name")]
         public string Name { get; set; }
 
-        [StringLength(255)]
-        public string Thumbnail { get; set; }
+        public HttpPostedFileBase Thumbnail { get; set; }
 
         [Required]
         public string Description { get; set; }

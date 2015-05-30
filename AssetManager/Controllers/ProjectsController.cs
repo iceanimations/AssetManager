@@ -43,7 +43,7 @@ namespace AssetManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
+        public ActionResult Create([Bind(Include = "Id,Name,Thumbnail,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace AssetManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
+        public ActionResult Edit([Bind(Include = "Id,Name,Thumbnail,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
         {
             if (ModelState.IsValid)
             {

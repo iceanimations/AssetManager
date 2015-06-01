@@ -155,7 +155,6 @@ namespace AssetManager.Controllers
             if (ModelState.IsValid)
             {
                 var asset = db.Assets.Find(viewModelAsset.Id);
-                asset.Id = viewModelAsset.Id;
                 asset.Name = viewModelAsset.Name;
                 asset.CategoryId = viewModelAsset.CategoryId;
                 asset.DateTimeCreated = viewModelAsset.DateTimeCreated;

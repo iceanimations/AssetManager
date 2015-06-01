@@ -161,16 +161,13 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var component = new Component
-                {
-                    Id = viewModelComponent.Id,
-                    Name = viewModelComponent.Name,
-                    AssetId = viewModelComponent.AssetId,
-                    FilePath = viewModelComponent.FilePath,
-                    Locked = viewModelComponent.Locked,
-                    Description = viewModelComponent.Description,
-                    DateTimeCreated = viewModelComponent.DateTimeCreated
-                };
+                var component = db.Components.Find(viewModelComponent.Id);
+                component.Name = viewModelComponent.Name;
+                component.AssetId = viewModelComponent.AssetId;
+                component.FilePath = viewModelComponent.FilePath;
+                component.Locked = viewModelComponent.Locked;
+                component.Description = viewModelComponent.Description;
+                component.DateTimeCreated = viewModelComponent.DateTimeCreated;
                 component.DateTimeUpdated = DateTime.Now;
                 db.Entry(component).State = EntityState.Modified;
                 db.SaveChanges();

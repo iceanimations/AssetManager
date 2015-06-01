@@ -114,13 +114,10 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = new Category
-                {
-                    Id = viewModelCategory.Id,
-                    Name = viewModelCategory.Name,
-                    ProjectId = viewModelCategory.ProjectId,
-                    DateTimeCreated = viewModelCategory.DateTimeCreated
-                };
+                var category = db.Categories.Find(viewModelCategory.Id);
+                category.Name = viewModelCategory.Name;
+                category.ProjectId = viewModelCategory.ProjectId;
+                category.DateTimeCreated = viewModelCategory.DateTimeCreated;
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
                 foreach (var cr in db.CategoryRules.ToList())

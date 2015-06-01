@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 using AssetManager.Models;
 using AssetManager.ViewModels;
 
@@ -41,6 +42,18 @@ namespace AssetManager.Controllers
             return View(new ProjectViewModel());
         }
 
+        private string GetThumbnail(ProjectViewModel model)
+        {
+            var ext = Path.GetExtension(model.Thumbnail.FileName);
+            var path = @"~\\Content\\Thumbnails\\Projects";
+            var basePath = Server.MapPath(path);
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
+            var thumbPath = Path.Combine(basePath, model.Name) + ext;
+            model.Thumbnail.SaveAs(thumbPath);
+            return Path.Combine(path, Path.GetFileName(thumbPath));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Thumbnail,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
@@ -48,11 +61,17 @@ namespace AssetManager.Controllers
             if (ModelState.IsValid)
             {
                 // create the project
-                var project = new Project();
-                project.Name = viewModelProject.Name;
-                project.Description = viewModelProject.Description;
-                project.DateTimeCreated = DateTime.Now;
-                project.ProjectTypeId = viewModelProject.ProjectTypeId;
+                var project = new Project
+                {
+                    Name = viewModelProject.Name,
+                    Description = viewModelProject.Description,
+                    DateTimeCreated = DateTime.Now,
+                    ProjectTypeId = viewModelProject.ProjectTypeId
+                };
+                if (viewModelProject.Thumbnail != null)
+                {
+                    project.Thumbnail = GetThumbnail(viewModelProject);
+                }
                 db.Projects.Add(project);
                 db.SaveChanges();
                 // create project rules
@@ -108,14 +127,15 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var project = new Project
+                var project = db.Projects.Find(viewModelProject.Id);
+                project.Name = viewModelProject.Name;
+                project.Description = viewModelProject.Description;
+                project.ProjectTypeId = viewModelProject.ProjectTypeId;
+                project.DateTimeCreated = viewModelProject.DateTimeCreated;
+                if (viewModelProject.Thumbnail != null)
                 {
-                    Id=viewModelProject.Id,
-                    Name = viewModelProject.Name,
-                    Description = viewModelProject.Description,
-                    ProjectTypeId = viewModelProject.ProjectTypeId,
-                    DateTimeCreated = viewModelProject.DateTimeCreated
-                };
+                    project.Thumbnail = GetThumbnail(viewModelProject);
+                }
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 var pr = db.ProjectRules.ToList();
@@ -125,11 +145,14 @@ namespace AssetManager.Controllers
                         db.ProjectRules.Remove(p);
                 }
                 db.SaveChanges();
-                for (var i = 0; i < viewModelProject.UserIds.Length; i++ )
+                if (viewModelProject.UserIds != null)
                 {
-                    db.ProjectRules.Add(new ProjectRule { ProjectId = project.Id, UserId = viewModelProject.UserIds[i] });
+                    for (var i = 0; i < viewModelProject.UserIds.Length; i++ )
+                    {
+                        db.ProjectRules.Add(new ProjectRule { ProjectId = project.Id, UserId = viewModelProject.UserIds[i] });
+                    }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.ProjectTypeId = new SelectList(db.ProjectTypes, "Id", "Type", viewModelProject.ProjectTypeId);

@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Home";
+    var thumb = "http://placehold.it/500/CCCCCC&amp&text={0}";
+    var url = "";
 }
 
 <div class="jumbotron" style="margin-top: 10px;">
@@ -14,14 +16,29 @@
             <div class="carousel-inner">
                 <div class="item active">
                     <div class="col-md-4">
-                        <a href="@Url.Action("Index", "Assets", new { id = Model.First().Id }) "><img src="http://placehold.it/500/CCCCCC&amp;text=@Model.First().Name" class="img-responsive"></a>
+                        @if (Model.First().Thumbnail != null) {
+                            url = Url.Content(Model.First().Thumbnail);
+                        }
+                        else
+                        {
+                            url = String.Format(thumb, Model.First().Name);
+                        }
+                        <a href="@Url.Action("Index", "Assets", new { id = Model.First().Id }) "><img src="@url" class="img-responsive" width="500" height="500"></a>
                         <div class="urun-title"><span class="glyphicon glyphicon-star"></span>@Model.First().Name</div>
                     </div>
                 </div>
                 @foreach(var project in Model.Skip(1)) {
                     <div class="item">
                         <div class="col-md-4">
-                            <a href="@Url.Action("Index", "Assets", new { id = project.Id })"><img src="http://placehold.it/500/CCCCCC&amp;text=@project.Name" class="img-responsive"></a>
+                            @if (project.Thumbnail != null)
+                            {
+                                url = Url.Content(project.Thumbnail);
+                            }
+                            else
+                            {
+                                url = String.Format(thumb, project.Name);
+                            }
+                            <a href="@Url.Action("Index", "Assets", new { id = project.Id })"><img src=@url class="img-responsive" width="500" height="500"></a>
                             <div class="urun-title"><span class="glyphicon glyphicon-star"></span>@project.Name</div>
                         </div>
                     </div>

@@ -30,7 +30,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <img width="30" height="30" src="@item.Thumbnail" alt="NO"/>
+            @if (item.Thumbnail != null)
+            {
+                <img width="30" height="30" src="@Url.Content(item.Thumbnail)" alt="NO"/>
+            }
             <a href="@Url.Action("Index", "Components", new { id=item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
         </td>
         <td>

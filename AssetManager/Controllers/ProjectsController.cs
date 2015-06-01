@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.IO;
 using AssetManager.Models;
 using AssetManager.ViewModels;
+using AssetManager.Utils;
 
 namespace AssetManager.Controllers
 {
@@ -42,18 +43,6 @@ namespace AssetManager.Controllers
             return View(new ProjectViewModel());
         }
 
-        private string GetThumbnail(ProjectViewModel model)
-        {
-            var ext = Path.GetExtension(model.Thumbnail.FileName);
-            var path = @"~\\Content\\Thumbnails\\Projects";
-            var basePath = Server.MapPath(path);
-            if (!Directory.Exists(basePath))
-                Directory.CreateDirectory(basePath);
-            var thumbPath = Path.Combine(basePath, model.Name) + ext;
-            model.Thumbnail.SaveAs(thumbPath);
-            return Path.Combine(path, Path.GetFileName(thumbPath));
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Thumbnail,Description,ProjectTypeId,UserIds,DateTimeCreated")] ProjectViewModel viewModelProject)
@@ -70,7 +59,7 @@ namespace AssetManager.Controllers
                 };
                 if (viewModelProject.Thumbnail != null)
                 {
-                    project.Thumbnail = GetThumbnail(viewModelProject);
+                    project.Thumbnail = Util.GetThumbnail(this, viewModelProject.Thumbnail, viewModelProject.Name, "Projects");
                 }
                 db.Projects.Add(project);
                 db.SaveChanges();
@@ -134,7 +123,7 @@ namespace AssetManager.Controllers
                 project.DateTimeCreated = viewModelProject.DateTimeCreated;
                 if (viewModelProject.Thumbnail != null)
                 {
-                    project.Thumbnail = GetThumbnail(viewModelProject);
+                    project.Thumbnail = Util.GetThumbnail(this, viewModelProject.Thumbnail, viewModelProject.Name, "Projects");
                 }
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();

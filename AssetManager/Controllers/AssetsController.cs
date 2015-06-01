@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
+using AssetManager.Utils;
 
 namespace AssetManager.Controllers
 {
@@ -86,10 +87,13 @@ namespace AssetManager.Controllers
                 var asset = new Asset
                 {
                     Name=viewModelAsset.Name,
-                    //Thumbnail = viewModelAsset.Thumbnail,
                     CategoryId=viewModelAsset.CategoryId,
                     DateTimeCreated = DateTime.Now
                 };
+                if (viewModelAsset.Thumbnail != null)
+                {
+                    asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
+                }
                 db.Assets.Add(asset);
                 db.SaveChanges();
                 if (viewModelAsset.UserIds != null)
@@ -150,14 +154,13 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var asset = new Asset
-                {
-                    Id = viewModelAsset.Id,
-                    Name = viewModelAsset.Name,
-                    //Thumbnail = viewModelAsset.Thumbnail,
-                    CategoryId = viewModelAsset.CategoryId,
-                    DateTimeCreated = viewModelAsset.DateTimeCreated
-                };
+                var asset = db.Assets.Find(viewModelAsset.Id);
+                asset.Id = viewModelAsset.Id;
+                asset.Name = viewModelAsset.Name;
+                asset.CategoryId = viewModelAsset.CategoryId;
+                asset.DateTimeCreated = viewModelAsset.DateTimeCreated;
+                if (viewModelAsset.Thumbnail != null)
+                    asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
                 db.Entry(asset).State = EntityState.Modified;
                 db.SaveChanges();
                 if (viewModelAsset.UserIds != null)

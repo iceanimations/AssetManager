@@ -18,6 +18,12 @@ namespace AssetManager.ViewModels
         {
             UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
         }
+
+        ~ComponentViewModel()
+        {
+            ((IDisposable)db).Dispose();
+        }
+
         public int Id { get; set; }
         [Required]
         [DisplayName("Component Name")]

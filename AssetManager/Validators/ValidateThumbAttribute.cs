@@ -23,7 +23,8 @@ namespace AssetManager.Validators
                 using (Image img = Image.FromStream(file.InputStream))
                 {
                     if (img.RawFormat.Equals(ImageFormat.Png) || img.RawFormat.Equals(ImageFormat.Jpeg))
-                        return img.Width == img.Height;
+                        if (img.Width == img.Height)
+                            return img.Width >= 200 && img.Height >= 200;
                 }
             }
             catch { }

@@ -33,7 +33,7 @@ namespace AssetManager.ViewModels
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }
 
-        [ValidateThumb(ErrorMessage = "Image Format: png, jpeg. Size: 10mb max. Resolution: square ")]
+        [ValidateThumb(ErrorMessage = "Image Format: png, jpeg. Size: 10mb max. Resolution: square (200x200 min) ")]
         public HttpPostedFileBase Thumbnail { get; set; }
         
         [Display(Name="Creation Date")]

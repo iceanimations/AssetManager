@@ -24,7 +24,7 @@ namespace AssetManager.ViewModels
         [Display(Name="Project Name")]
         public string Name { get; set; }
 
-        [ValidateThumb(ErrorMessage="Image format: png, jpeg. Size: 10mb max. Resolution: square")]
+        [ValidateThumb(ErrorMessage="Image format: png, jpeg. Size: 10mb max. Resolution: square (200x200 min)")]
         public HttpPostedFileBase Thumbnail { get; set; }
 
         [Required]

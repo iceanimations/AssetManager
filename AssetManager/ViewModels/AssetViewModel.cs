@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using AssetManager.Models;
 using System.Web.Mvc;
+using AssetManager.Validators;
 
 namespace AssetManager.ViewModels
 {
@@ -18,7 +19,9 @@ namespace AssetManager.ViewModels
         {
             UserList = new MultiSelectList(db.Users.ToList(), "Id", "Name");
         }
+        
         public int Id { get; set; }
+        
         [Required]
         [DisplayName("Asset Name")]
         public string Name { get; set; }
@@ -30,7 +33,9 @@ namespace AssetManager.ViewModels
         public int[] UserIds { get; set; }
         public MultiSelectList UserList { get; set; }
 
+        [ValidateThumb(ErrorMessage = "Image Format: png, jpeg. Size: 10mb max. Resolution: square ")]
         public HttpPostedFileBase Thumbnail { get; set; }
+        
         [Display(Name="Creation Date")]
         public DateTime DateTimeCreated { get; set; }
     }

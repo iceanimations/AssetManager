@@ -58,9 +58,9 @@ namespace AssetManager.Controllers
                     ProjectTypeId = viewModelProject.ProjectTypeId
                 };
                 if (viewModelProject.Thumbnail != null)
-                {
                     project.Thumbnail = Util.GetThumbnail(this, viewModelProject.Thumbnail, viewModelProject.Name, "Projects");
-                }
+                else
+                    project.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text="+project.Name;
                 db.Projects.Add(project);
                 db.SaveChanges();
                 // create project rules
@@ -122,9 +122,10 @@ namespace AssetManager.Controllers
                 project.ProjectTypeId = viewModelProject.ProjectTypeId;
                 project.DateTimeCreated = viewModelProject.DateTimeCreated;
                 if (viewModelProject.Thumbnail != null)
-                {
                     project.Thumbnail = Util.GetThumbnail(this, viewModelProject.Thumbnail, viewModelProject.Name, "Projects");
-                }
+                else
+                    if (project.Thumbnail.StartsWith("http://placehold.it"))
+                        project.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text=" + viewModelProject.Name;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 var pr = db.ProjectRules.ToList();

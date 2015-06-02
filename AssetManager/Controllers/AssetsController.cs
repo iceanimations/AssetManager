@@ -91,9 +91,9 @@ namespace AssetManager.Controllers
                     DateTimeCreated = DateTime.Now
                 };
                 if (viewModelAsset.Thumbnail != null)
-                {
                     asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
-                }
+                else
+                    asset.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text="+ asset.Name;
                 db.Assets.Add(asset);
                 db.SaveChanges();
                 if (viewModelAsset.UserIds != null)
@@ -160,6 +160,9 @@ namespace AssetManager.Controllers
                 asset.DateTimeCreated = viewModelAsset.DateTimeCreated;
                 if (viewModelAsset.Thumbnail != null)
                     asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
+                else
+                    if (asset.Thumbnail.StartsWith("http://placehold.it"))
+                        asset.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text=" + viewModelAsset.Name;
                 db.Entry(asset).State = EntityState.Modified;
                 db.SaveChanges();
                 if (viewModelAsset.UserIds != null)

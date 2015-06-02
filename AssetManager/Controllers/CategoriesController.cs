@@ -47,6 +47,7 @@ namespace AssetManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,ProjectId,UserIds,DateTimeCreated")] CategoryViewModel viewModelCategory)
         {
+            ViewBag.Success = false; // to show the fadeIn msg after successful submission
             if (ModelState.IsValid)
             {
                 var category = new Category
@@ -70,7 +71,8 @@ namespace AssetManager.Controllers
                     }
                     db.SaveChanges();
                 }
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                ViewBag.Success = true;
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", viewModelCategory.ProjectId);
             return View(viewModelCategory);

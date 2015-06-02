@@ -7,12 +7,19 @@
 <script>
     $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
     $("#locBar").append("<span>Create New Asset</span>");
+
+    $(document).ready(function () {
+        var tag = '@ViewBag.Success' == '@true';
+        if (tag == true) {
+            $("#msg").fadeIn().delay(2000).fadeOut();
+        }
+    });
 </script>
 
 <h2>Create Asset</h2>
 
 
-@using (Html.BeginForm("Create", "Assets", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Assets", FormMethod.Post, new { enctype = "multipart/form-data", id = "asset-form"}))
 {
     @Html.AntiForgeryToken()
     
@@ -55,12 +62,15 @@
         
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-success" />
+                <input type="submit" value="Create" class="btn btn-success" id="btn-subm"/>
             </div>
         </div>
+
     </div>
 }
-
+<div class="alert alert-success" style="display: none" id="msg">
+    Asset added successfully
+</div>
 <div>
     @Html.ActionLink("Back to List", "Index", new { id=ViewBag.Project.Id })
 </div>

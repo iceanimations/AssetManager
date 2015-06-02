@@ -82,6 +82,7 @@ namespace AssetManager.Controllers
         //[Bind(Include = "Id,Name,CategoryId,Thumbnail,UserIds")] 
         public ActionResult Create(AssetViewModel viewModelAsset)
         {
+            ViewBag.Success = false; // to show the fadeIn msg after successful submission
             if (ModelState.IsValid)
             {
                 var asset = new Asset
@@ -109,8 +110,9 @@ namespace AssetManager.Controllers
                     }
                     db.SaveChanges();
                 }
-                var project = db.Categories.Find(asset.CategoryId).Project;
-                return RedirectToAction("Index", new { id=project.Id });
+                //var project = db.Categories.Find(asset.CategoryId).Project;
+                //return RedirectToAction("Index", new { id=project.Id });
+                ViewBag.Success = true;
             }
             var cat = db.Categories.Find(viewModelAsset.CategoryId);
             ViewBag.Project = db.Projects.Find(cat.ProjectId);

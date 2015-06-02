@@ -7,6 +7,13 @@
 <script>
     $("#locBar").append("<a href=@Url.Action("Index", "Categories")>Categories</a> > ")
     $("#locBar").append("<span>Create New Category</span>");
+
+    $(document).ready(function () {
+        var tag = '@ViewBag.Success' == '@true';
+        if (tag == true) {
+            $("#msg").fadeIn().delay(2000).fadeOut();
+        }
+    });
 </script>
 
 <h2>Create New Category</h2>
@@ -50,6 +57,10 @@
         </div>
     </div>
 }
+
+<div class="alert alert-success" style="display: none" id="msg">
+    Category added successfully
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")

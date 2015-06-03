@@ -9,10 +9,23 @@
 </script>
 
 <h2>Categories</h2>
-
-<p>
+<div class="col-md-2" style="padding-top: 5px;">
     @Html.ActionLink("Create New Category", "Create")
-</p>
+</div>
+    @using (Html.BeginForm("Index", "Categories", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-3 pull-right">
+                    @Html.DropDownList("ProjectId", null, "", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
+                </div>
+                @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-2 pull-right" })
+                
+            </div>
+        </div>
+    }
+
 <table class="table">
     <tr>
         <th>

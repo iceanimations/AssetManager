@@ -17,7 +17,7 @@ namespace AssetManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Assets
-        public ActionResult Index(int? id)
+        public ActionResult Index(int? id, string SearchString)
         {
             if (id == null)
             {
@@ -40,6 +40,18 @@ namespace AssetManager.Controllers
             foreach (var cat in cats)
             {
                 assets.AddRange(cat.Assets);
+            }
+            if (SearchString != null)
+            {
+                var newAssets = new List<Asset>();
+                foreach (var asset in assets)
+                {
+                    if (asset.Name.ToLower().Contains(SearchString.ToLower()))
+                    {
+                        newAssets.Add(asset);
+                    }
+                }
+                assets = newAssets;
             }
             return View(assets);
         }

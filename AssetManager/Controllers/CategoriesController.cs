@@ -16,9 +16,29 @@ namespace AssetManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Categories
-        public ActionResult Index()
+        public ActionResult Index(int? ProjectId)
         {
-            return View(db.Categories.ToList());
+            Project project;
+            List<Category> categories = new List<Category>();
+            if (ProjectId != null)
+            {
+                project = db.Projects.Find(ProjectId);
+                ViewBag.ProjectName = project.Name;
+                foreach (var cat in db.Categories)
+                {
+                    if (cat.ProjectId == ProjectId)
+                    {
+                        categories.Add(cat);
+                    }
+                }
+            }
+            else
+            {
+                categories.AddRange(db.Categories.ToList());
+                ViewBag.ProjectName = "";
+            }
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ProjectId);
+            return View(categories.ToList());
         }
 
         // GET: Categories/Details/5

@@ -267,6 +267,8 @@
     <Content Include="Views\ProjectTypes\Index.cshtml" />
     <Content Include="Views\Projects\EditRules.cshtml" />
     <Content Include="Views\Categories\EditRules.cshtml" />
+    <Content Include="Views\Assets\EditRules.cshtml" />
+    <Content Include="Views\Components\EditRules.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

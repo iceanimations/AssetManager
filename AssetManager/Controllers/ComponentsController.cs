@@ -192,6 +192,64 @@ namespace AssetManager.Controllers
             return View(viewModelComponent);
         }
 
+        public ActionResult EditRules(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Component component = db.Components.Find(id);
+            if (component == null)
+            {
+                return HttpNotFound();
+            }
+            var model = new ComponentViewModel
+            {
+                Id = component.Id,
+                Name = component.Name
+            };
+            var UserIds = new List<int>();
+            foreach (var cr in db.ComponentRules.ToList())
+            {
+                if (cr.ComponentId == component.Id)
+                {
+                    UserIds.Add(cr.UserId);
+                }
+            }
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
+            model.UserIds = UserIds.ToArray();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRules([Bind(Include = "Id,UserIds")] ComponentViewModel viewModelComponent)
+        {
+            foreach (var ar in db.ComponentRules.ToList())
+            {
+                if (ar.ComponentId == viewModelComponent.Id)
+                {
+                    db.ComponentRules.Remove(ar);
+                }
+            }
+            db.SaveChanges();
+            if (viewModelComponent.UserIds != null)
+            {
+                foreach (var uid in viewModelComponent.UserIds)
+                {
+                    db.ComponentRules.Add(new ComponentRule
+                    {
+                        UserId = uid,
+                        ComponentId = viewModelComponent.Id
+                    });
+                }
+                db.SaveChanges();
+            }
+            var asset = db.Components.Find(viewModelComponent.Id).Asset;
+            return RedirectToAction("Index", new { id = asset.Id });
+        }
+
         // GET: Components/Delete/5
         public ActionResult Delete(int? id)
         {

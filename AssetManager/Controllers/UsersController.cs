@@ -15,9 +15,22 @@ using AssetManager.Models;
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Users
-        public ActionResult Index()
+        public ActionResult Index(string SearchString)
         {
-            return View(db.Users.ToList());
+            var users = db.Users.ToList();
+            if (SearchString != null)
+            {
+                var newUsers = new List<User>();
+                foreach (var user in users)
+                {
+                    if (user.Name.ToLower().Contains(SearchString))
+                    {
+                        newUsers.Add(user);
+                    }
+                }
+                users = newUsers;
+            }
+            return View(users);
         }
 
         // GET: Users/Details/5

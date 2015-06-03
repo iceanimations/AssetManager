@@ -201,6 +201,63 @@ namespace AssetManager.Controllers
             return View(viewModelAsset);
         }
 
+        public ActionResult EditRules(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Asset asset = db.Assets.Find(id);
+            if (asset == null)
+            {
+                return HttpNotFound();
+            }
+            var model = new AssetViewModel
+            {
+                Id = asset.Id,
+                Name = asset.Name
+            };
+            var UserIds = new List<int>();
+            foreach (var ar in db.AssetRules.ToList())
+            {
+                if (ar.AssetId == asset.Id)
+                {
+                    UserIds.Add(ar.UserId);
+                }
+            }
+            ViewBag.Project = asset.Category.Project;
+            model.UserIds = UserIds.ToArray();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRules([Bind(Include = "Id,UserIds")] AssetViewModel viewModelAsset)
+        {
+            foreach (var ar in db.AssetRules.ToList())
+            {
+                if (ar.AssetId == viewModelAsset.Id)
+                {
+                    db.AssetRules.Remove(ar);
+                }
+            }
+            db.SaveChanges();
+            if (viewModelAsset.UserIds != null)
+            {
+                foreach (var uid in viewModelAsset.UserIds)
+                {
+                    db.AssetRules.Add(new AssetRule
+                    {
+                        UserId = uid,
+                        AssetId = viewModelAsset.Id
+                    });
+                }
+                db.SaveChanges();
+            }
+            var project = db.Assets.Find(viewModelAsset.Id).Category.Project;
+            return RedirectToAction("Index", new { id = project.Id });
+        }
+
         // GET: Assets/Delete/5
         public ActionResult Delete(int? id)
         {

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
+using System.IO;
 
 namespace AssetManager.Controllers
 {
@@ -70,6 +71,21 @@ namespace AssetManager.Controllers
             ViewBag.Success = false; // to show the fadeIn msg after successful submission
             if (ModelState.IsValid)
             {
+                try
+                {
+                    string[] values = viewModelCategory.Name.Split('/');
+                    var path = Path.Combine(values);
+                    viewModelCategory.Name = path;
+                    var project = db.Projects.Find(viewModelCategory.ProjectId);
+                    path = Path.Combine(project.Name, path);
+                    path = Path.Combine(project.ProjectType.LocationUNC, path);
+                    Directory.CreateDirectory(path);
+                }
+                catch(Exception ex)
+                {
+                    return Content(ex.ToString());
+                }
+                // create the project in database
                 var category = new Category
                 {
                     Name=viewModelCategory.Name,

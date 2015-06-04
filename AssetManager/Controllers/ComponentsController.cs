@@ -79,13 +79,24 @@ namespace AssetManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ActionName("Create")]
         //[Bind(Include = "Id,Name,AssetId,UploadedFile,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] 
-        public ActionResult Create(ComponentViewModel viewModelComponent)
+        public ActionResult CreatePost(ComponentViewModel viewModelComponent)
         {
-            //var file = Request.Files[0];
             var asset = db.Assets.Find(viewModelComponent.AssetId);
             if (ModelState.IsValid)
             {
+                // create components in file system
+                try
+                {
+                    var path = Path.Combine(asset.Category.Project.ProjectType.LocationUNC, asset.Category.Project.Name, asset.Category.Name, asset.Name);
+                    path = Path.Combine(path, viewModelComponent.Name);
+                    Directory.CreateDirectory(path);
+                }
+                catch(Exception ex)
+                {
+                    return Content(ex.ToString());
+                }
                 var component = new Component
                 {
                     Name = viewModelComponent.Name,

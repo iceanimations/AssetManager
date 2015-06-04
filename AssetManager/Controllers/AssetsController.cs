@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
 using AssetManager.Utils;
+using System.IO;
 
 namespace AssetManager.Controllers
 {
@@ -97,6 +98,16 @@ namespace AssetManager.Controllers
             ViewBag.Success = false; // to show the fadeIn msg after successful submission
             if (ModelState.IsValid)
             {
+                try
+                {
+                    var category = db.Categories.Find(viewModelAsset.CategoryId);
+                    var path = Path.Combine(category.Project.ProjectType.LocationUNC, category.Project.Name, category.Name, viewModelAsset.Name);
+                    Directory.CreateDirectory(path);
+                }
+                catch(Exception ex)
+                {
+                    return Content(ex.ToString());
+                }
                 var asset = new Asset
                 {
                     Name=viewModelAsset.Name,
@@ -109,6 +120,24 @@ namespace AssetManager.Controllers
                     asset.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text="+ asset.Name;
                 db.Assets.Add(asset);
                 db.SaveChanges();
+                // create default components
+                foreach (var name in new String[] { "model", "rig", "shaded" })
+                {
+                    var component = new ComponentViewModel
+                    {
+                        Name = name,
+                        AssetId = asset.Id,
+                        Locked = true,
+                        Description = name + " for " + viewModelAsset.Name,
+                        DateTimeCreated = DateTime.Now,
+                        DateTimeUpdated = DateTime.Now
+                    };
+                    try
+                    {
+                        new ComponentsController().CreatePost(component);
+                    }
+                    catch (Exception ex) { return Content(ex.ToString()); }
+                }
                 if (viewModelAsset.UserIds != null)
                 {
                     foreach (var uid in viewModelAsset.UserIds)

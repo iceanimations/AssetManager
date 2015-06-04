@@ -57,13 +57,12 @@
         </td>
         <td>
             
-            @if (User.Identity.Name == @"ICEANIMATIONS\qurban.ali")
+            @if (User.Identity.Name.ToLower() == @"ICEANIMATIONS\qurban.ali".ToLower())
             {
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) <text>|</text>
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id }) <text>|</text>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text>|</text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text>|</text>
             }
-                @Html.ActionLink("Edit Rules", "EditRules", new { id = item.Id }) <text>|</text>
-            
+            @Html.ActionLink("Edit Rules", "EditRules", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id })
         </td>
     </tr>

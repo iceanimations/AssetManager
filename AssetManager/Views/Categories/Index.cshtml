@@ -51,9 +51,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.DateTimeCreated)
         </td>
-        <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Edit Rules", "EditRules", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+        <td>
+            @if (User.Identity.Name.ToLower() == @"ICEANIMATIONS\qurban.ali".ToLower())
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text>|</text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text>|</text>
+            }
+            @Html.ActionLink("Edit Rules", "EditRules", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id })
         </td>
     </tr>

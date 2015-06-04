@@ -32,14 +32,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Thumbnail)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Thumbnail)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.DateTimeCreated)
         </dt>
 
@@ -64,5 +56,6 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit Rules", "EditRules", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index", new { id=ViewBag.ProjectId })
 </p>

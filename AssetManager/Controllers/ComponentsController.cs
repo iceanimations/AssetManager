@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
+using System.IO;
 
 namespace AssetManager.Controllers
 {
@@ -46,6 +47,7 @@ namespace AssetManager.Controllers
             }
             ViewBag.Project = component.Asset.Category.Project;
             ViewBag.Asset = component.Asset;
+            ViewBag.FileName = Path.GetFileName(component.FilePath);
             return View(component);
         }
 

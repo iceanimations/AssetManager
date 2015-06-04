@@ -27,6 +27,7 @@ namespace AssetManager.ViewModels
         
         [Required]
         [Display(Name="Category Name")]
+        [RegularExpression("[A-Za-z0-9_/]{3,200}", ErrorMessage = "Alpha-numeric, underscore and slash (/) allowed (3 to 200 characters)")]
         public string Name { get; set; }
 
         [Required]

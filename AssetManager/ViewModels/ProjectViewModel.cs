@@ -28,12 +28,14 @@ namespace AssetManager.ViewModels
         
         [Required]
         [Display(Name="Project Name")]
+        [RegularExpression("[A-Za-z0-9_]{3,50}", ErrorMessage = "Alpha-numeric, underscore allowed (3 to 50 characters)")]
         public string Name { get; set; }
 
         [ValidateThumb(ErrorMessage="Image format: png, jpeg. Size: 10mb max. Resolution: square (200x200 min)")]
         public HttpPostedFileBase Thumbnail { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string Description { get; set; }
 
         [Required]

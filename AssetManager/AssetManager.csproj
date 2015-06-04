@@ -153,6 +153,10 @@
     <Compile Include="Migrations\201505121112100_requiredAdded.Designer.cs">
       <DependentUpon>201505121112100_requiredAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506040729435_reAddedToProjectTypes.cs" />
+    <Compile Include="Migrations\201506040729435_reAddedToProjectTypes.Designer.cs">
+      <DependentUpon>201506040729435_reAddedToProjectTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Asset.cs" />
@@ -290,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505121112100_requiredAdded.resx">
       <DependentUpon>201505121112100_requiredAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506040729435_reAddedToProjectTypes.resx">
+      <DependentUpon>201506040729435_reAddedToProjectTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

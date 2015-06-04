@@ -29,6 +29,7 @@ namespace AssetManager.ViewModels
         
         [Required]
         [DisplayName("Asset Name")]
+        [RegularExpression("[A-Za-z0-9_]{6,50}", ErrorMessage="Only alpha-numeric and underscore allowed (6 to 50 characters)")]
         public string Name { get; set; }
         
         [Required]

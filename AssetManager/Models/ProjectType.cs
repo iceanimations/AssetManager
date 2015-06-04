@@ -18,17 +18,17 @@ namespace AssetManager.Models
         
         [Required]
         [Display(Name="Project Type")]
-        [StringLength(50)]
+        [RegularExpression("[A-Za-z0-9]{3,50}", ErrorMessage = "Alpha-numeric allowed (3 to 50 characters)")]
         public string Type { get; set; }
         
         [Required]
-        [StringLength(255)]
         [Display(Name="UNC Location")]
+        [RegularExpression("[A-Za-z0-9_\\-\\\\]{3,255}", ErrorMessage = "Alpha-numeric, underscore, back-slashes allowed (3 to 255 characters)")]
         public string LocationUNC { get; set; }
 
         [Required]
-        [StringLength(255)]
         [Display(Name="Display Location")]
+        [RegularExpression("[A-Za-z0-9_:\\\\]{3,255}", ErrorMessage = "Alpha-numeric, underscore, colon, back-slashes allowed (3 to 255 characters)")]
         public string LocationDisplay { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }

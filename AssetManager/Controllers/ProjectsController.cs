@@ -49,7 +49,18 @@ namespace AssetManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                // create the project
+                // Handle file system
+                try
+                {
+                    var basePath = db.ProjectTypes.Find(viewModelProject.ProjectTypeId).LocationUNC;
+                    Directory.CreateDirectory(Path.Combine(basePath, viewModelProject.Name));
+                }
+                catch (Exception ex)
+                {
+                    return Content("Error: Could not create specified directory at " + db.ProjectTypes.Find(viewModelProject.ProjectTypeId).LocationDisplay +
+                        " \nMake sure that the network is working properly.\n\n" + ex.ToString());
+                }
+                // create project in database
                 var project = new Project
                 {
                     Name = viewModelProject.Name,

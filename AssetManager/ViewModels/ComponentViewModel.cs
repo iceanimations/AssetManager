@@ -27,6 +27,7 @@ namespace AssetManager.ViewModels
         public int Id { get; set; }
         [Required]
         [DisplayName("Component Name")]
+        [RegularExpression("[A-Za-z0-9_]{3,50}", ErrorMessage = "Alpha-numeric, underscore allowed (3 to 50 characters)")]
         public string Name { get; set; }
 
         [Required]
@@ -38,6 +39,7 @@ namespace AssetManager.ViewModels
         [DisplayName("File")]
         public HttpPostedFileBase UploadedFile { get; set; }
         public bool Locked { get; set; }
+        [StringLength(100)]
         public string Description { get; set; }
 
         public int[] UserIds { get; set; }

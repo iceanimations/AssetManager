@@ -27,5 +27,20 @@ namespace AssetManager.Utils
             thumbnail.SaveAs(thumbPath);
             return Path.Combine(path, Path.GetFileName(thumbPath));
         }
+
+        public static string GetAssetPath(Asset asset)
+        {
+            string path = Path.Combine(asset.Category.Project.ProjectType.LocationUNC, asset.Category.Project.Name,
+                asset.Category.Name, asset.Name);
+            return path;
+        }
+
+        public static string GetComponentPath(Component component)
+        {
+            string path = Path.Combine(component.Asset.Category.Project.ProjectType.LocationUNC,
+                component.Asset.Category.Project.Name, component.Asset.Category.Name, component.Asset.Name);
+            path = Path.Combine(path, component.Name);
+            return path;
+        }
     }
 }

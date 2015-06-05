@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
 using System.IO;
+using AssetManager.Utils;
 
 namespace AssetManager.Controllers
 {
@@ -80,16 +81,16 @@ namespace AssetManager.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Create")]
-        //[Bind(Include = "Id,Name,AssetId,UploadedFile,Locked,Description,UserIds,DateTimeCreated,DateTimeUpdated")] 
         public ActionResult CreatePost(ComponentViewModel viewModelComponent)
         {
             var asset = db.Assets.Find(viewModelComponent.AssetId);
             if (ModelState.IsValid)
             {
                 // create components in file system
+                string path = "";
                 try
                 {
-                    var path = Path.Combine(asset.Category.Project.ProjectType.LocationUNC, asset.Category.Project.Name, asset.Category.Name, asset.Name);
+                    path = Util.GetAssetPath(asset);
                     path = Path.Combine(path, viewModelComponent.Name);
                     Directory.CreateDirectory(path);
                 }
@@ -106,8 +107,24 @@ namespace AssetManager.Controllers
                     DateTimeCreated = DateTime.Now,
                     DateTimeUpdated = DateTime.Now
                 };
+                // save the uploaded maya file
+                if (viewModelComponent.UploadedFile != null)
+                {
+                    try
+                    {
+                        string ext = Path.GetExtension(viewModelComponent.UploadedFile.FileName);
+                        path = Path.Combine(path, string.Join("_", new string[] { asset.Name, viewModelComponent.Name })) + ext;
+                        viewModelComponent.UploadedFile.SaveAs(path);
+                        component.FilePath = path;
+                    }
+                    catch(Exception ex)
+                    {
+                        return Content(ex.ToString());
+                    }
+                }
                 db.Components.Add(component);
                 db.SaveChanges();
+                // create rules
                 if (viewModelComponent.UserIds != null)
                 {
                     foreach (var uid in viewModelComponent.UserIds)
@@ -182,6 +199,21 @@ namespace AssetManager.Controllers
                 component.Description = viewModelComponent.Description;
                 component.DateTimeCreated = viewModelComponent.DateTimeCreated;
                 component.DateTimeUpdated = DateTime.Now;
+                if (viewModelComponent.UploadedFile != null)
+                {
+                    try
+                    {
+                        string ext = Path.GetExtension(viewModelComponent.UploadedFile.FileName);
+                        string path = Util.GetComponentPath(component);
+                        path = Path.Combine(path, string.Join("_", new string[] { component.Asset.Name, component.Name })) + ext;
+                        viewModelComponent.UploadedFile.SaveAs(path);
+                        component.FilePath = path;
+                    }
+                    catch(Exception ex)
+                    {
+                        return Content(ex.ToString());
+                    }
+                }
                 db.Entry(component).State = EntityState.Modified;
                 db.SaveChanges();
                 foreach (var cr in db.ComponentRules.ToList())

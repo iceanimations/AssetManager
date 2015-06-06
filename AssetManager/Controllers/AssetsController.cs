@@ -119,7 +119,7 @@ namespace AssetManager.Controllers
                 if (viewModelAsset.Thumbnail != null)
                     asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
                 else
-                    asset.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text="+ asset.Name;
+                    asset.Thumbnail = "~/Content/Images/no-thumbnail.png";
                 db.Assets.Add(asset);
                 db.SaveChanges();
                 // create default components
@@ -153,8 +153,6 @@ namespace AssetManager.Controllers
                     }
                     db.SaveChanges();
                 }
-                //var project = db.Categories.Find(asset.CategoryId).Project;
-                //return RedirectToAction("Index", new { id=project.Id });
                 ViewBag.Success = true;
             }
             var cat = db.Categories.Find(viewModelAsset.CategoryId);
@@ -205,9 +203,6 @@ namespace AssetManager.Controllers
                 asset.DateTimeCreated = viewModelAsset.DateTimeCreated;
                 if (viewModelAsset.Thumbnail != null)
                     asset.Thumbnail = Util.GetThumbnail(this, viewModelAsset.Thumbnail, viewModelAsset.Name, "Assets");
-                else
-                    if (asset.Thumbnail.StartsWith("http://placehold.it"))
-                        asset.Thumbnail = "http://placehold.it/500/CCCCCC&amp&text=" + viewModelAsset.Name;
                 db.Entry(asset).State = EntityState.Modified;
                 db.SaveChanges();
                 if (viewModelAsset.UserIds != null)

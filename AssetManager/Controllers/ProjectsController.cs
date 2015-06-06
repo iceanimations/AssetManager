@@ -13,15 +13,18 @@ using AssetManager.Utils;
 
 namespace AssetManager.Controllers
 {
+    [Authorize(Users=@"ICEANIMATIONS\qurban.ali,ICEANIMATIONS\sarmad.mushtaq")]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(db.Projects.ToList());
         }
 
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -91,7 +94,6 @@ namespace AssetManager.Controllers
             return View(viewModelProject);
         }
 
-        // GET: Projects/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -204,7 +206,6 @@ namespace AssetManager.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Projects/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -219,7 +220,6 @@ namespace AssetManager.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

@@ -9,14 +9,17 @@ using System.Web.Mvc;
 using AssetManager.Models;
 using AssetManager.ViewModels;
 using System.IO;
+using AssetManager.Utils;
+using AssetManager.Authorization;
 
 namespace AssetManager.Controllers
 {
+    [AuthorizeCategory]
     public class CategoriesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Categories
+        [AllowAnonymous]
         public ActionResult Index(int? ProjectId)
         {
             Project project;
@@ -42,7 +45,7 @@ namespace AssetManager.Controllers
             return View(categories.ToList());
         }
 
-        // GET: Categories/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -57,7 +60,7 @@ namespace AssetManager.Controllers
             return View(category);
         }
 
-        // GET: Categories/Create
+
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
@@ -240,7 +243,6 @@ namespace AssetManager.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Categories/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -255,7 +257,6 @@ namespace AssetManager.Controllers
             return View(category);
         }
 
-        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

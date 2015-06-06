@@ -10,14 +10,16 @@ using AssetManager.Models;
 using AssetManager.ViewModels;
 using AssetManager.Utils;
 using System.IO;
+using AssetManager.Authorization;
 
 namespace AssetManager.Controllers
 {
+    [AuthorizeAsset]
     public class AssetsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Assets
+        [AllowAnonymous]
         public ActionResult Index(int? id, string SearchString)
         {
             if (id == null)
@@ -57,7 +59,7 @@ namespace AssetManager.Controllers
             return View(assets);
         }
 
-        // GET: Assets/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)

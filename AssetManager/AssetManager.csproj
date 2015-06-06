@@ -127,6 +127,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AuthorizationAttributes\AuthorizeAssetAttribute.cs" />
+    <Compile Include="AuthorizationAttributes\AuthorizeCategoryAttribute.cs" />
+    <Compile Include="AuthorizationAttributes\AuthorizeComponentAttribute.cs" />
+    <Compile Include="AuthorizationAttributes\AuthorizeProjectAttribute.cs" />
     <Compile Include="Controllers\AssetRulesController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />

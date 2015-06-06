@@ -42,5 +42,55 @@ namespace AssetManager.Utils
             path = Path.Combine(path, component.Name);
             return path;
         }
+
+        public static bool isAuthorized(string username, Project project)
+        {
+            foreach (var pr in project.ProjectRules)
+                if (pr.User.Name == username)
+                    return true;
+            return false;
+        }
+
+        public static bool isAuthorized(string username, Category category)
+        {
+            foreach (var cr in category.CategoryRules)
+                if (cr.User.Name == username)
+                    return true;
+            foreach (var pr in category.Project.ProjectRules)
+                if (pr.User.Name == username)
+                    return true;
+            return false;
+        }
+
+        public static bool isAuthorized(string username, Asset asset)
+        {
+            foreach (var ar in asset.AssetRules)
+                if (ar.User.Name == username)
+                    return true;
+            foreach (var cr in asset.Category.CategoryRules)
+                if (cr.User.Name == username)
+                    return true;
+            foreach (var pr in asset.Category.Project.ProjectRules)
+                if (pr.User.Name == username)
+                    return true;
+            return false;
+        }
+
+        public static bool isAuthorized(string username, Component component)
+        {
+            foreach (var cr in component.ComponentRules)
+                if (cr.User.Name == username)
+                    return true;
+            foreach (var ar in component.Asset.AssetRules)
+                if (ar.User.Name == username)
+                    return true;
+            foreach (var cr in component.Asset.Category.CategoryRules)
+                if (cr.User.Name == username)
+                    return true;
+            foreach (var pr in component.Asset.Category.Project.ProjectRules)
+                if (pr.User.Name == username)
+                    return true;
+            return false;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace AssetManager.Models
         public int Id { get; set; }
         [Required]
         [Display(Name="Username")]
-        [RegularExpression("[A-Za-z0-9\\.]{3,50}", ErrorMessage = "Alpha-numeric, period allowed (3 to 50 characters)")]
+        [RegularExpression("[A-Za-z0-9\\.\\\\]{3,50}", ErrorMessage = "Alpha-numeric, period allowed (3 to 50 characters)")]
         public string Name { get; set; }
 
         public virtual ICollection<ProjectRule> ProjectRules { get; set; }

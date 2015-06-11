@@ -11,9 +11,20 @@ namespace AssetManager.Utils
 {
     public class Util
     {
+        public static ApplicationDbContext db = new ApplicationDbContext();
         public static void ArchiveComponent(Component comp)
         {
             
+        }
+
+        public static bool IsAnonymous(ActionExecutingContext filterContext)
+        {
+            if (filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true)
+                || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true))
+            {
+                return true;
+            }
+            return false;
         }
 
         public static string GetThumbnail(Controller controller, HttpPostedFileBase thumbnail, string name, string type)
@@ -45,51 +56,58 @@ namespace AssetManager.Utils
 
         public static bool isAuthorized(string username, Project project)
         {
-            foreach (var pr in project.ProjectRules)
-                if (pr.User.Name == username)
+            foreach (var pr in db.ProjectRules.ToList())
+                if (pr.User.Name == username && pr.ProjectId == project.Id)
                     return true;
             return false;
         }
 
         public static bool isAuthorized(string username, Category category)
         {
-            foreach (var cr in category.CategoryRules)
-                if (cr.User.Name == username)
+            foreach (var cr in db.CategoryRules.ToList())
+                if (cr.User.Name == username && cr.CategoryId == category.Id)
                     return true;
-            foreach (var pr in category.Project.ProjectRules)
-                if (pr.User.Name == username)
+            foreach (var pr in db.ProjectRules.ToList())
+                if (pr.ProjectId == category.ProjectId && pr.User.Name == username)
                     return true;
             return false;
         }
 
         public static bool isAuthorized(string username, Asset asset)
         {
-            foreach (var ar in asset.AssetRules)
-                if (ar.User.Name == username)
+            foreach (var ar in db.AssetRules.ToList())
+                if (ar.User.Name == username && ar.AssetId == asset.Id)
                     return true;
-            foreach (var cr in asset.Category.CategoryRules)
-                if (cr.User.Name == username)
+            foreach (var cr in db.CategoryRules.ToList())
+                if (cr.User.Name == username && cr.CategoryId == asset.CategoryId)
                     return true;
-            foreach (var pr in asset.Category.Project.ProjectRules)
-                if (pr.User.Name == username)
+            foreach (var pr in db.ProjectRules.ToList())
+                if (pr.User.Name == username && pr.ProjectId == asset.Category.Project.Id)
                     return true;
             return false;
         }
 
         public static bool isAuthorized(string username, Component component)
         {
-            foreach (var cr in component.ComponentRules)
-                if (cr.User.Name == username)
+            foreach (var cr in db.ComponentRules.ToList())
+                if (cr.User.Name == username && cr.ComponentId == component.Id)
                     return true;
-            foreach (var ar in component.Asset.AssetRules)
-                if (ar.User.Name == username)
+            foreach (var ar in db.AssetRules.ToList())
+                if (ar.AssetId == component.AssetId && ar.User.Name == username)
                     return true;
-            foreach (var cr in component.Asset.Category.CategoryRules)
-                if (cr.User.Name == username)
+            foreach (var cr in db.CategoryRules.ToList())
+                if (cr.User.Name == username && component.Asset.Category.Id == cr.CategoryId)
                     return true;
-            foreach (var pr in component.Asset.Category.Project.ProjectRules)
-                if (pr.User.Name == username)
+            foreach (var pr in db.ProjectRules.ToList())
+                if (pr.User.Name == username && pr.ProjectId == component.Asset.Category.Project.Id)
                     return true;
+            return false;
+        }
+
+        public static bool IsNameEqual(string s1, string s2)
+        {
+            if (s1.ToLower().Split('\\').Last() == s2.ToLower().Split('\\').Last())
+                return true;
             return false;
         }
     }

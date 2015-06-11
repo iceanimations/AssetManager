@@ -148,6 +148,25 @@ namespace AssetManager.Controllers
             return View(viewModelComponent);
         }
 
+        public ActionResult Download(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Component comp = db.Components.Find(id);
+            if (comp == null)
+            {
+                return HttpNotFound();
+            }
+            Response.Clear();
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", Path.GetFileName(comp.FilePath)));
+            Response.WriteFile(comp.FilePath);
+            Response.End();
+            return null;
+        }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -196,7 +215,6 @@ namespace AssetManager.Controllers
                 var component = db.Components.Find(viewModelComponent.Id);
                 component.Name = viewModelComponent.Name;
                 component.AssetId = viewModelComponent.AssetId;
-                component.FilePath = viewModelComponent.FilePath;
                 component.Locked = viewModelComponent.Locked;
                 component.Description = viewModelComponent.Description;
                 component.DateTimeCreated = viewModelComponent.DateTimeCreated;
@@ -205,6 +223,14 @@ namespace AssetManager.Controllers
                 {
                     try
                     {
+                        // archive the existing file is exists
+                        string filePath = component.FilePath;
+                        if (filePath != null && System.IO.File.Exists(filePath))
+                        {
+                            string archivePath = Path.Combine(Path.GetDirectoryName(filePath), "Archive", DateTime.Now.ToString().Replace('/', '-').Replace(" ", "__").Replace(':', '.'));
+                            Directory.CreateDirectory(archivePath);
+                            System.IO.File.Move(component.FilePath, Path.Combine(archivePath, Path.GetFileName(component.FilePath)));
+                        }
                         string ext = Path.GetExtension(viewModelComponent.UploadedFile.FileName);
                         string path = Util.GetComponentPath(component);
                         path = Path.Combine(path, string.Join("_", new string[] { component.Asset.Name, component.Name })) + ext;

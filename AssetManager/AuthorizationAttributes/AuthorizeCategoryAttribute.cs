@@ -22,24 +22,42 @@ namespace AssetManager.Authorization
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            foreach (var param in filterContext.ActionParameters)
+            if (!Util.IsAnonymous(filterContext))
             {
-                if (param.Value is CategoryViewModel)
+                foreach (var param in filterContext.ActionParameters)
                 {
-                    var model = param.Value as CategoryViewModel;
-                    Project project = db.Projects.Find(model.ProjectId);
-                    bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, project);
-                    if (!isAuthorized)
-                        filterContext.Result = new HttpUnauthorizedResult();
-                }
-                else if (param.Value is int)
-                {
-                    Category category = db.Categories.Find(param.Value);
-                    if (category != null)
+                    if ((filterContext.ActionDescriptor.ActionName == "EditRules" ||
+                        filterContext.ActionDescriptor.ActionName == "Edit") &&
+                        filterContext.RequestContext.HttpContext.Request.RequestType == "POST")
                     {
-                        bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, category);
-                        if (!isAuthorized)
-                            filterContext.Result = new HttpUnauthorizedResult();
+                        Category category = db.Categories.Find((param.Value as CategoryViewModel).Id);
+                        if (category != null)
+                        {
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, category);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                    }
+                    else
+                    {
+                        if (param.Value is CategoryViewModel)
+                        {
+                            var model = param.Value as CategoryViewModel;
+                            Project project = db.Projects.Find(model.ProjectId);
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, project);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                        else if (param.Value is int)
+                        {
+                            Category category = db.Categories.Find(param.Value);
+                            if (category != null)
+                            {
+                                bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, category);
+                                if (!isAuthorized)
+                                    filterContext.Result = new HttpUnauthorizedResult();
+                            }
+                        }
                     }
                 }
             }

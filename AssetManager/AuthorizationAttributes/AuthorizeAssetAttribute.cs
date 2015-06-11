@@ -22,24 +22,42 @@ namespace AssetManager.Authorization
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            foreach (var param in filterContext.ActionParameters)
+            if (!Util.IsAnonymous(filterContext))
             {
-                if (param.Value is AssetViewModel)
+                foreach (var param in filterContext.ActionParameters)
                 {
-                    var model = param.Value as AssetViewModel;
-                    Category category = db.Categories.Find(model.CategoryId);
-                    bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, category);
-                    if (!isAuthorized)
-                        filterContext.Result = new HttpUnauthorizedResult();
-                }
-                else if (param.Value is int)
-                {
-                    Asset asset = db.Assets.Find(param.Value);
-                    if (asset != null)
+                    if ((filterContext.ActionDescriptor.ActionName == "EditRules" ||
+                        filterContext.ActionDescriptor.ActionName == "Edit") &&
+                        filterContext.RequestContext.HttpContext.Request.RequestType == "POST")
                     {
-                        bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, asset);
-                        if (!isAuthorized)
-                            filterContext.Result = new HttpUnauthorizedResult();
+                        Asset asset = db.Assets.Find((param.Value as AssetViewModel).Id);
+                        if (asset != null)
+                        {
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, asset);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                    }
+                    else
+                    {
+                        if (param.Value is AssetViewModel)
+                        {
+                            var model = param.Value as AssetViewModel;
+                            Category category = db.Categories.Find(model.CategoryId);
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, category);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                        else if (param.Value is int)
+                        {
+                            Asset asset = db.Assets.Find(param.Value);
+                            if (asset != null)
+                            {
+                                bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, asset);
+                                if (!isAuthorized)
+                                    filterContext.Result = new HttpUnauthorizedResult();
+                            }
+                        }
                     }
                 }
             }

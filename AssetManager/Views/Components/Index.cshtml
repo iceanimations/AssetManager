@@ -41,7 +41,16 @@
             {
                 <img src="@Url.Content(item.Asset.Thumbnail)" width="30" height="30" alt="No"/>
             }
-            @Html.DisplayFor(modelItem => item.Name)
+            @if (item.FilePath != null)
+            {
+                <a href="@Url.Action("Download", new { id = item.Id })" target="_blank">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+            }
+            else
+            {
+                @Html.DisplayFor(modelItem => item.Name)
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Asset.Name)

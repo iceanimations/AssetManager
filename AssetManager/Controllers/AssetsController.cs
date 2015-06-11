@@ -176,7 +176,6 @@ namespace AssetManager.Controllers
             {
                 Id = asset.Id,
                 Name = asset.Name,
-                //Thumbnail = asset.Thumbnail,
                 CategoryId = asset.CategoryId,
                 DateTimeCreated = asset.DateTimeCreated
             };
@@ -241,7 +240,8 @@ namespace AssetManager.Controllers
             var model = new AssetViewModel
             {
                 Id = asset.Id,
-                Name = asset.Name
+                Name = asset.Name,
+                CategoryId = asset.CategoryId
             };
             var UserIds = new List<int>();
             foreach (var ar in db.AssetRules.ToList())
@@ -258,7 +258,7 @@ namespace AssetManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRules([Bind(Include = "Id,UserIds")] AssetViewModel viewModelAsset)
+        public ActionResult EditRules([Bind(Include = "Id,CategoryId,UserIds")] AssetViewModel viewModelAsset)
         {
             foreach (var ar in db.AssetRules.ToList())
             {

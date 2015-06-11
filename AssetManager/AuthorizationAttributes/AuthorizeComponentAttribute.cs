@@ -22,24 +22,43 @@ namespace AssetManager.Authorization
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            foreach (var param in filterContext.ActionParameters)
+            if (!Util.IsAnonymous(filterContext))
             {
-                if (param.Value is ComponentViewModel)
+                foreach (var param in filterContext.ActionParameters)
                 {
-                    var model = param.Value as ComponentViewModel;
-                    Asset asset = db.Assets.Find(model.AssetId);
-                    bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, asset);
-                    if (!isAuthorized)
-                        filterContext.Result = new HttpUnauthorizedResult();
-                }
-                else if (param.Value is int)
-                {
-                    Component component = db.Components.Find(param.Value);
-                    if (component != null)
+                    if ((filterContext.ActionDescriptor.ActionName == "EditRules" ||
+                        filterContext.ActionDescriptor.ActionName == "Edit") &&
+                        filterContext.RequestContext.HttpContext.Request.RequestType == "POST")
                     {
-                        bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, component);
-                        if (!isAuthorized)
-                            filterContext.Result = new HttpUnauthorizedResult();
+                        Component component = db.Components.Find((param.Value as ComponentViewModel).Id);
+                        if (component != null)
+                        {
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, component);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                    }
+                    else
+                    {
+                        if (param.Value is ComponentViewModel)
+                        {
+                            var model = param.Value as ComponentViewModel;
+                            Asset asset = db.Assets.Find(model.AssetId);
+                            bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, asset);
+                            if (!isAuthorized)
+                                filterContext.Result = new HttpUnauthorizedResult();
+                        }
+                        else if (param.Value is int)
+                        {
+                            Component component = db.Components.Find(param.Value);
+                            if (component != null)
+                            {
+                                bool isAuthorized = Util.isAuthorized(filterContext.HttpContext.User.Identity.Name, component);
+                                var project = db.Projects.First();
+                                if (!isAuthorized)
+                                    filterContext.Result = new HttpUnauthorizedResult();
+                            }
+                        }
                     }
                 }
             }

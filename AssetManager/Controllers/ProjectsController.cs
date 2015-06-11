@@ -195,11 +195,14 @@ namespace AssetManager.Controllers
                     db.ProjectRules.Remove(p);
             }
             db.SaveChanges();
-            for (var i = 0; i < viewModelProject.UserIds.Length; i++)
+            if (viewModelProject.UserIds != null)
             {
-                db.ProjectRules.Add(new ProjectRule { ProjectId = viewModelProject.Id, UserId = viewModelProject.UserIds[i] });
+                for (var i = 0; i < viewModelProject.UserIds.Length; i++)
+                {
+                    db.ProjectRules.Add(new ProjectRule { ProjectId = viewModelProject.Id, UserId = viewModelProject.UserIds[i] });
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

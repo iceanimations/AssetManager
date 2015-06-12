@@ -12,6 +12,23 @@ namespace AssetManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                bool flag = false;
+                foreach (User user in db.Users.ToList())
+                {
+                    if (user.Name.Split('\\').Last() == User.Identity.Name.Split('\\').Last())
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    db.Users.Add(new User { Name = User.Identity.Name });
+                    db.SaveChanges();
+                }
+            }
             return View(db.Projects.ToList());
         }
 

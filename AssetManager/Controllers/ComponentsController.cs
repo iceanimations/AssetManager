@@ -54,7 +54,6 @@ namespace AssetManager.Controllers
             return View(component);
         }
 
-        // GET: Components/Create
         public ActionResult Create(int? id)
         {
             if (id == null)
@@ -148,6 +147,7 @@ namespace AssetManager.Controllers
             return View(viewModelComponent);
         }
 
+        [AllowAnonymous]
         public ActionResult Download(int? id)
         {
             if (id == null)

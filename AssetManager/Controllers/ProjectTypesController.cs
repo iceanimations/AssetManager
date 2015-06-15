@@ -10,6 +10,7 @@ using AssetManager.Models;
 
 namespace AssetManager.Controllers
 {
+    [Authorize(Users = @"ICEANIMATIONS\qurban.ali")]
     public class ProjectTypesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

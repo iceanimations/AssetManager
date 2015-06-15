@@ -8,8 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using AssetManager.Models;
 
-//namespace AssetManager.Controllers
-//{
+namespace AssetManager.Controllers
+{
+    [Authorize(Users=@"ICEANIMATIONS\qurban.ali")]
     public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -138,4 +139,4 @@ using AssetManager.Models;
             base.Dispose(disposing);
         }
     }
-//}
+}

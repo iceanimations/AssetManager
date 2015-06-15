@@ -38,7 +38,16 @@
         </dt>
 
         <dd>
-            @ViewBag.FileName
+            @if (Model.FilePath != null && !Model.Locked)
+            {
+                <a href="@Url.Action("Download", new { id = Model.Id })" target="_blank">
+                    @ViewBag.FileName
+                </a>
+            }
+            else
+            {
+                @ViewBag.FileName
+            }
         </dd>
 
         <dt>
@@ -89,7 +98,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @if (User.Identity.Name == @"ICEANIMATIONS\qurban.ali")
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <text>|</text>
+    }
     @Html.ActionLink("Edit Rules", "EditRules", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index", new { id=ViewBag.Asset.Id })
 </p>

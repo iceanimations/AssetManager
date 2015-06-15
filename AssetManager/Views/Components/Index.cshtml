@@ -20,12 +20,6 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Asset.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Locked)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.DateTimeCreated)
         </th>
         <th>
@@ -41,7 +35,7 @@
             {
                 <img src="@Url.Content(item.Asset.Thumbnail)" width="30" height="30" alt="No"/>
             }
-            @if (item.FilePath != null)
+            @if (item.FilePath != null && !item.Locked)
             {
                 <a href="@Url.Action("Download", new { id = item.Id })" target="_blank">
                     @Html.DisplayFor(modelItem => item.Name)
@@ -51,12 +45,6 @@
             {
                 @Html.DisplayFor(modelItem => item.Name)
             }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Asset.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Locked)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateTimeCreated)

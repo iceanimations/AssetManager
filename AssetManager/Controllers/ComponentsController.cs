@@ -227,9 +227,16 @@ namespace AssetManager.Controllers
                         string filePath = component.FilePath;
                         if (filePath != null && System.IO.File.Exists(filePath))
                         {
-                            string archivePath = Path.Combine(Path.GetDirectoryName(filePath), "Archive", DateTime.Now.ToString().Replace('/', '-').Replace(" ", "__").Replace(':', '.'));
-                            Directory.CreateDirectory(archivePath);
-                            System.IO.File.Move(component.FilePath, Path.Combine(archivePath, Path.GetFileName(component.FilePath)));
+                            ComponentArchive archive = new ComponentArchive {
+                                ArchiveDate = DateTime.Now,
+                                ComponentId = component.Id,
+                            };
+                            string archivePath = Util.GetArchivePath(component, archive.ArchiveDate);
+                            string archiveFilePath = Path.Combine(archivePath, Path.GetFileName(component.FilePath));
+                            System.IO.File.Move(component.FilePath, archiveFilePath);
+                            archive.FilePath = archiveFilePath;
+                            db.ComponentArchives.Add(archive);
+                            db.SaveChanges();
                         }
                         string ext = Path.GetExtension(viewModelComponent.UploadedFile.FileName);
                         string path = Util.GetComponentPath(component);

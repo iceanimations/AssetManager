@@ -14,6 +14,7 @@ namespace AssetManager.Models
         public Component()
         {
             ComponentRules = new HashSet<ComponentRule>();
+            ComponentArchives = new HashSet<ComponentArchive>();
         }
         public int Id { get; set; }
         [Required]
@@ -26,6 +27,7 @@ namespace AssetManager.Models
 
         public virtual Asset Asset { get; set; }
         public virtual ICollection<ComponentRule> ComponentRules { get; set; }
+        public virtual ICollection<ComponentArchive> ComponentArchives { get; set; }
 
         [StringLength(255)]
         [DisplayName("File Path")]

@@ -110,5 +110,12 @@ namespace AssetManager.Utils
                 return true;
             return false;
         }
+
+        public static string GetArchivePath(Component component, DateTime dateTime)
+        {
+            string archivePath = Path.Combine(Path.GetDirectoryName(component.FilePath), "Archive", dateTime.ToString().Replace('/', '-').Replace(" ", "__").Replace(':', '.'));
+            Directory.CreateDirectory(archivePath);
+            return archivePath;
+        }
     }
 }

@@ -135,6 +135,7 @@
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CategoryRulesController.cs" />
+    <Compile Include="Controllers\ComponentArchivesController.cs" />
     <Compile Include="Controllers\ComponentRulesController.cs" />
     <Compile Include="Controllers\ComponentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -161,8 +162,13 @@
     <Compile Include="Migrations\201506040729435_reAddedToProjectTypes.Designer.cs">
       <DependentUpon>201506040729435_reAddedToProjectTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506151200373_ComponentArchiveAdded.cs" />
+    <Compile Include="Migrations\201506151200373_ComponentArchiveAdded.Designer.cs">
+      <DependentUpon>201506151200373_ComponentArchiveAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ComponentArchive.cs" />
     <Compile Include="Models\Asset.cs" />
     <Compile Include="Models\AssetRule.cs" />
     <Compile Include="Models\Category.cs" />
@@ -278,6 +284,8 @@
     <Content Include="Views\Categories\EditRules.cshtml" />
     <Content Include="Views\Assets\EditRules.cshtml" />
     <Content Include="Views\Components\EditRules.cshtml" />
+    <Content Include="Views\ComponentArchives\Index.cshtml" />
+    <Content Include="Views\ComponentArchives\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -301,6 +309,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506040729435_reAddedToProjectTypes.resx">
       <DependentUpon>201506040729435_reAddedToProjectTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506151200373_ComponentArchiveAdded.resx">
+      <DependentUpon>201506151200373_ComponentArchiveAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

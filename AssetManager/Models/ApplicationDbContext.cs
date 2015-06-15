@@ -25,7 +25,9 @@ namespace AssetManager.Models
         public DbSet<AssetRule> AssetRules { get; set; }
         public DbSet<ComponentRule> ComponentRules { get; set; }
 
+        //misc
         public DbSet<ProjectType> ProjectTypes { get; set; }
+        public DbSet<ComponentArchive> ComponentArchives { get; set; }
         
 
     }

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<AssetManager.Models.ComponentArchive>
+
+@{
+    ViewBag.Title = "Component Archives";
+}
+
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ");
+    $("#locBar").append("<a href=@Url.Action("Index", "Components", new { id=ViewBag.Asset.Id })>@ViewBag.Asset.Name</a> > ");
+    $("#locBar").append("<span>@ViewBag.Component.Name</span>");
+</script>
+
+<h2>Component Archives</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArchiveDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <a href="@Url.Action("Download", new { id = item.Id })" target="_blank">
+                @Html.DisplayFor(modelItem => item.ArchiveDate)
+            </a>
+        </td>
+        <td>
+            @Html.ActionLink("Revive", "Revive", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

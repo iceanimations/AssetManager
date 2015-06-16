@@ -25,6 +25,10 @@ namespace AssetManager.Models
         public string FilePath { get; set; }
 
         public virtual Component Component { get; set; }
-        
+
+        [DisplayName("Component Creation Date")]
+        public DateTime ComponentDateTimeCreated { get; set; }
+        [DisplayName("Component Modification Date")]
+        public DateTime ComponentDateTimeUpdated { get; set; }
     }
 }

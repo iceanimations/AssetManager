@@ -12,10 +12,6 @@ namespace AssetManager.Utils
     public class Util
     {
         public static ApplicationDbContext db = new ApplicationDbContext();
-        public static void ArchiveComponent(Component comp)
-        {
-            
-        }
 
         public static bool IsAnonymous(ActionExecutingContext filterContext)
         {
@@ -67,10 +63,7 @@ namespace AssetManager.Utils
             foreach (var cr in db.CategoryRules.ToList())
                 if (cr.User.Name == username && cr.CategoryId == category.Id)
                     return true;
-            foreach (var pr in db.ProjectRules.ToList())
-                if (pr.ProjectId == category.ProjectId && pr.User.Name == username)
-                    return true;
-            return false;
+            return isAuthorized(username, db.Projects.Find(category.ProjectId));
         }
 
         public static bool isAuthorized(string username, Asset asset)
@@ -78,13 +71,7 @@ namespace AssetManager.Utils
             foreach (var ar in db.AssetRules.ToList())
                 if (ar.User.Name == username && ar.AssetId == asset.Id)
                     return true;
-            foreach (var cr in db.CategoryRules.ToList())
-                if (cr.User.Name == username && cr.CategoryId == asset.CategoryId)
-                    return true;
-            foreach (var pr in db.ProjectRules.ToList())
-                if (pr.User.Name == username && pr.ProjectId == asset.Category.Project.Id)
-                    return true;
-            return false;
+            return isAuthorized(username, db.Categories.Find(asset.CategoryId));
         }
 
         public static bool isAuthorized(string username, Component component)
@@ -92,23 +79,7 @@ namespace AssetManager.Utils
             foreach (var cr in db.ComponentRules.ToList())
                 if (cr.User.Name == username && cr.ComponentId == component.Id)
                     return true;
-            foreach (var ar in db.AssetRules.ToList())
-                if (ar.AssetId == component.AssetId && ar.User.Name == username)
-                    return true;
-            foreach (var cr in db.CategoryRules.ToList())
-                if (cr.User.Name == username && component.Asset.Category.Id == cr.CategoryId)
-                    return true;
-            foreach (var pr in db.ProjectRules.ToList())
-                if (pr.User.Name == username && pr.ProjectId == component.Asset.Category.Project.Id)
-                    return true;
-            return false;
-        }
-
-        public static bool IsNameEqual(string s1, string s2)
-        {
-            if (s1.ToLower().Split('\\').Last() == s2.ToLower().Split('\\').Last())
-                return true;
-            return false;
+            return isAuthorized(username, db.Assets.Find(component.AssetId));
         }
 
         public static string GetArchivePath(Component component, DateTime dateTime)

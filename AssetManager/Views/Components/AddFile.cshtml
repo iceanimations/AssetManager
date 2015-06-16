@@ -1,0 +1,52 @@
+﻿@model AssetManager.ViewModels.ComponentViewModel
+
+@{
+    ViewBag.Title = "Add Component File";
+}
+
+<script>
+    $("#locBar").append("<a href=@Url.Action("Index", "Assets", new { id=ViewBag.Project.Id })>@ViewBag.Project.Name</a> > ")
+    $("#locBar").append("<a href=@Url.Action("Index", "Components", new { id=ViewBag.Asset.Id })>@ViewBag.Asset.Name</a> > ")
+    $("#locBar").append("<span>@Model.Name</span>");
+</script>
+
+<h2>Add Component File</h2>
+<hr />
+
+@using (Html.BeginForm("AddFile", "Components", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        @Html.HiddenFor(model => model.Id)
+
+        @Html.HiddenFor(model => model.AssetId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UploadedFile, "File", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <span class="btn input-field">
+                    @Html.TextBoxFor(model => model.UploadedFile, htmlAttributes: new { type = "file" })
+                </span>
+                @Html.ValidationMessageFor(model => model.UploadedFile, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success"/>
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back To List", "Index", new { id = ViewBag.Asset.Id })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Bundles/jqueryval")
+}

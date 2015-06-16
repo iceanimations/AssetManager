@@ -1,7 +1,7 @@
 ﻿@model AssetManager.Models.ComponentArchive
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Details";
 }
 
 <script>
@@ -11,9 +11,8 @@
     $("#locBar").append("<span>@Model.ArchiveDate.ToString()</span>");
 </script>
 
-<h2>Delete Component Archive</h2>
+<h2>Component Archive Details</h2>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -50,13 +49,8 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-danger" /> |
-            @Html.ActionLink("Back to List", "Index", new { id = Model.ComponentId })
-        </div>
-    }
 </div>
+<p>
+    @Html.ActionLink("Revive", "Revive", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index", new { id = Model.ComponentId })
+</p>

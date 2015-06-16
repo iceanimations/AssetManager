@@ -129,6 +129,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthorizationAttributes\AuthorizeAssetAttribute.cs" />
     <Compile Include="AuthorizationAttributes\AuthorizeCategoryAttribute.cs" />
+    <Compile Include="AuthorizationAttributes\AuthorizeComponentArchiveAttribute.cs" />
     <Compile Include="AuthorizationAttributes\AuthorizeComponentAttribute.cs" />
     <Compile Include="AuthorizationAttributes\AuthorizeProjectAttribute.cs" />
     <Compile Include="Controllers\AssetRulesController.cs" />
@@ -165,6 +166,10 @@
     <Compile Include="Migrations\201506151200373_ComponentArchiveAdded.cs" />
     <Compile Include="Migrations\201506151200373_ComponentArchiveAdded.Designer.cs">
       <DependentUpon>201506151200373_ComponentArchiveAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506161111513_compDatesAddedToArchive.cs" />
+    <Compile Include="Migrations\201506161111513_compDatesAddedToArchive.Designer.cs">
+      <DependentUpon>201506161111513_compDatesAddedToArchive.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -286,6 +291,9 @@
     <Content Include="Views\Components\EditRules.cshtml" />
     <Content Include="Views\ComponentArchives\Index.cshtml" />
     <Content Include="Views\ComponentArchives\Delete.cshtml" />
+    <Content Include="Views\ComponentArchives\Details.cshtml" />
+    <Content Include="Views\ComponentArchives\Revive.cshtml" />
+    <Content Include="Views\Components\AddFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -312,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506151200373_ComponentArchiveAdded.resx">
       <DependentUpon>201506151200373_ComponentArchiveAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506161111513_compDatesAddedToArchive.resx">
+      <DependentUpon>201506161111513_compDatesAddedToArchive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

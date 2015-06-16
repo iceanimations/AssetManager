@@ -167,6 +167,66 @@ namespace AssetManager.Controllers
             return null;
         }
 
+        public ActionResult AddFile(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            Component component = db.Components.Find(id);
+            if (component == null)
+                return HttpNotFound();
+            ComponentViewModel model = new ComponentViewModel
+            {
+                Id = component.Id,
+                Name = component.Name,
+                AssetId = component.AssetId
+            };
+            ViewBag.Project = component.Asset.Category.Project;
+            ViewBag.Asset = component.Asset;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddFile(ComponentViewModel model)
+        {
+            Component component = db.Components.Find(model.Id);
+            if (model.UploadedFile != null)
+            {
+                try
+                {
+                    string componentPath = Util.GetComponentPath(component);
+                    string ext = Path.GetExtension(model.UploadedFile.FileName);
+                    componentPath = Path.Combine(componentPath, string.Join("_", new string[] { component.Asset.Name, component.Name })) + ext;
+                    if (component.FilePath != null)
+                    {
+                        ComponentArchive archive = new ComponentArchive
+                        {
+                            ArchiveDate = DateTime.Now,
+                            ComponentId = component.Id,
+                            ComponentDateTimeCreated = component.DateTimeCreated,
+                            ComponentDateTimeUpdated = component.DateTimeUpdated
+                        };
+                        string archivePath = Util.GetArchivePath(component, archive.ArchiveDate);
+                        string archiveFilePath = Path.Combine(archivePath, Path.GetFileName(component.FilePath));
+                        System.IO.File.Move(component.FilePath, archiveFilePath);
+                        archive.FilePath = archiveFilePath;
+                        db.ComponentArchives.Add(archive);
+                        db.SaveChanges();
+                    }
+                    model.UploadedFile.SaveAs(componentPath);
+                    component.FilePath = componentPath;
+                    component.DateTimeUpdated = DateTime.Now;
+                }
+                catch (Exception ex)
+                {
+                    return Content(ex.ToString());
+                }
+                db.Entry(component).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", new { id = component.AssetId });
+        }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -218,7 +278,6 @@ namespace AssetManager.Controllers
                 component.Locked = viewModelComponent.Locked;
                 component.Description = viewModelComponent.Description;
                 component.DateTimeCreated = viewModelComponent.DateTimeCreated;
-                component.DateTimeUpdated = DateTime.Now;
                 if (viewModelComponent.UploadedFile != null)
                 {
                     try
@@ -230,6 +289,8 @@ namespace AssetManager.Controllers
                             ComponentArchive archive = new ComponentArchive {
                                 ArchiveDate = DateTime.Now,
                                 ComponentId = component.Id,
+                                ComponentDateTimeCreated = component.DateTimeCreated,
+                                ComponentDateTimeUpdated = component.DateTimeUpdated
                             };
                             string archivePath = Util.GetArchivePath(component, archive.ArchiveDate);
                             string archiveFilePath = Path.Combine(archivePath, Path.GetFileName(component.FilePath));
@@ -243,6 +304,7 @@ namespace AssetManager.Controllers
                         path = Path.Combine(path, string.Join("_", new string[] { component.Asset.Name, component.Name })) + ext;
                         viewModelComponent.UploadedFile.SaveAs(path);
                         component.FilePath = path;
+                        component.DateTimeUpdated = DateTime.Now;
                     }
                     catch(Exception ex)
                     {
